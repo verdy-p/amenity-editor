@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="https://maven.apache.org/POM/4.0.0"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.osmsurround</groupId>
 	<artifactId>amenity-editor</artifactId>
@@ -22,33 +24,33 @@
 		<oauth.consumerKey/>
 		<oauth.consumerSecret/>
 
-		<osm.api.base.url>http://api06.dev.openstreetmap.org</osm.api.base.url>
-		<oauth.requestTokenEndpointUrl>http://api06.dev.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
-		<oauth.accessTokenEndpointUrl>http://api06.dev.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
-		<oauth.authorizeWebsiteUrl>http://api06.dev.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
+		<osm.api.base.url>https://api06.dev.openstreetmap.org</osm.api.base.url>
+		<oauth.requestTokenEndpointUrl>https://api06.dev.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
+		<oauth.accessTokenEndpointUrl>https://api06.dev.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
+		<oauth.authorizeWebsiteUrl>https://api06.dev.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
 	</properties>
 	<profiles>
 		<profile>
 			<id>build-prd</id>
 			<properties>
-				<oauth.callbackUrl>http://ae.osmsurround.org/ae/oauth</oauth.callbackUrl>
+				<oauth.callbackUrl>https://ae.osmsurround.org/ae/oauth</oauth.callbackUrl>
 				<war.file.name>ROOT</war.file.name>
 			</properties>
 		</profile>
 		<profile>
 			<id>build-test</id>
 			<properties>
-				<oauth.callbackUrl>http://ae.osmsurround.org/TEST/ae/oauth</oauth.callbackUrl>
+				<oauth.callbackUrl>https://ae.osmsurround.org/TEST/ae/oauth</oauth.callbackUrl>
 				<war.file.name>TEST</war.file.name>
 			</properties>
 		</profile>
 		<profile>
 			<id>osm-prd</id>
 			<properties>
-				<osm.api.base.url>http://api.openstreetmap.org</osm.api.base.url>
-				<oauth.requestTokenEndpointUrl>http://www.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
-				<oauth.accessTokenEndpointUrl>http://www.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
-				<oauth.authorizeWebsiteUrl>http://www.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
+				<osm.api.base.url>https://api.openstreetmap.org</osm.api.base.url>
+				<oauth.requestTokenEndpointUrl>https://www.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
+				<oauth.accessTokenEndpointUrl>https://www.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
+				<oauth.authorizeWebsiteUrl>https://www.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
 			</properties>
 		</profile>
 		<profile>
@@ -208,7 +210,7 @@
 		<repository>
 			<id>org.springframework.maven.snapshot</id>
 			<name>Spring Maven Snapshot Repository</name>
-			<url>http://maven.springframework.org/snapshot</url>
+			<url>https://maven.springframework.org/snapshot</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -220,7 +222,7 @@
 		<repository>
 			<id>org.springframework.maven.milestone</id>
 			<name>Spring Maven Milestone Repository</name>
-			<url>http://maven.springframework.org/milestone</url>
+			<url>https://maven.springframework.org/milestone</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
