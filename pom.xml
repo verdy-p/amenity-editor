@@ -1,75 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="https://maven.apache.org/POM/4.0.0"
 	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
+	<!-- The Basics -->
 	<groupId>org.osmsurround</groupId>
 	<artifactId>amenity-editor</artifactId>
-	<name>amenity-editor</name>
-	<packaging>war</packaging>
 	<version>0.94-SNAPSHOT</version>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java-version>1.8</java-version>
-		<org.springframework-version>4.3.29.RELEASE</org.springframework-version>
-		<org.slf4j-version>1.7.30</org.slf4j-version>
-		<war.file.name>amenity-editor</war.file.name>
-
-		<db.driver>org.h2.Driver</db.driver>
-		<db.url>jdbc:h2:mem:ae;INIT=RUNSCRIPT FROM 'classpath:database.sql'</db.url>
-		<db.user>sa</db.user>
-		<db.password>sa</db.password>
-
-		<oauth.callbackUrl>http://localhost:8080/amenity-editor/ae/oauth</oauth.callbackUrl>
-		<oauth.consumerKey/>
-		<oauth.consumerSecret/>
-
-		<osm.api.base.url>https://api06.dev.openstreetmap.org</osm.api.base.url>
-		<oauth.requestTokenEndpointUrl>https://api06.dev.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
-		<oauth.accessTokenEndpointUrl>https://api06.dev.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
-		<oauth.authorizeWebsiteUrl>https://api06.dev.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
-	</properties>
-	<profiles>
-		<profile>
-			<id>build-prd</id>
-			<properties>
-				<oauth.callbackUrl>https://ae.osmsurround.org/ae/oauth</oauth.callbackUrl>
-				<war.file.name>ROOT</war.file.name>
-			</properties>
-		</profile>
-		<profile>
-			<id>build-test</id>
-			<properties>
-				<oauth.callbackUrl>https://ae.osmsurround.org/TEST/ae/oauth</oauth.callbackUrl>
-				<war.file.name>TEST</war.file.name>
-			</properties>
-		</profile>
-		<profile>
-			<id>osm-prd</id>
-			<properties>
-				<osm.api.base.url>https://api.openstreetmap.org</osm.api.base.url>
-				<oauth.requestTokenEndpointUrl>https://www.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
-				<oauth.accessTokenEndpointUrl>https://www.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
-				<oauth.authorizeWebsiteUrl>https://www.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
-			</properties>
-		</profile>
-		<profile>
-			<id>ae-postgresql</id>
-			<properties>
-				<db.driver>org.postgresql.Driver</db.driver>
-				<db.url>jdbc:postgresql://localhost/ae</db.url>
-				<db.user>osm</db.user>
-				<db.password>osm</db.password>
-			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>postgresql</groupId>
-					<artifactId>postgresql</artifactId>
-					<version>8.4-702.jdbc4</version>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
+	<packaging>war</packaging>
+	<parent></parent>
+	<dependencyManagement></dependencyManagement>
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
@@ -205,42 +146,30 @@
 			<version>1.4.200</version>
 		</dependency>
 	</dependencies>
-	<repositories>
-		<!-- For testing against latest Spring snapshots -->
-		<repository>
-			<id>org.springframework.maven.snapshot</id>
-			<name>Spring Maven Snapshot Repository</name>
-			<url>https://maven.springframework.org/snapshot</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<!-- For developing against latest Spring milestones -->
-		<repository>
-			<id>org.springframework.maven.milestone</id>
-			<name>Spring Maven Milestone Repository</name>
-			<url>https://maven.springframework.org/milestone</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	<distributionManagement>
-		<repository>
-			<id>maven.grundid.de</id>
-			<url>scp://maven.grundid.de/repo/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>maven.grundid.de</id>
-			<url>scp://maven.grundid.de/repo/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-	<scm>
-		<developerConnection>scm:git:ssh://git@github.com/grundid/amenity-editor.git</developerConnection>
-	</scm>
+	<modules></modules>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java-version>1.8</java-version>
+		<org.springframework-version>4.3.29.RELEASE</org.springframework-version>
+		<org.slf4j-version>1.7.30</org.slf4j-version>
+		<war.file.name>amenity-editor</war.file.name>
+
+		<db.driver>org.h2.Driver</db.driver>
+		<db.url>jdbc:h2:mem:ae;INIT=RUNSCRIPT FROM 'classpath:database.sql'</db.url>
+		<db.user>sa</db.user>
+		<db.password>sa</db.password>
+
+		<oauth.callbackUrl>http://localhost:8080/amenity-editor/ae/oauth</oauth.callbackUrl>
+		<oauth.consumerKey/>
+		<oauth.consumerSecret/>
+
+		<osm.api.base.url>https://api06.dev.openstreetmap.org</osm.api.base.url>
+		<oauth.requestTokenEndpointUrl>https://api06.dev.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
+		<oauth.accessTokenEndpointUrl>https://api06.dev.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
+		<oauth.authorizeWebsiteUrl>https://api06.dev.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
+	</properties>
+
+	<!-- Build Settings -->
 	<build>
 		<extensions>
 			<extension>
@@ -324,4 +253,99 @@
 			</testResource>
 		</testResources>
 	</build>
+	<reporting></reporting>
+
+	<!-- More Project Information -->
+	<name>amenity-editor</name>
+	<description></description>
+	<url></url>
+	<inceptionYear></inceptionYear>
+	<licenses></licenses>
+	<organization></organization>
+	<developers></developers>
+	<contributors></contributors>
+
+	<!-- Environment Settings -->
+	<issueManagement></issueManagement>
+	<ciManagement></ciManagement>
+	<mailingLists></mailingLists>
+	<scm>
+		<developerConnection>scm:git:ssh://git@github.com/grundid/amenity-editor.git</developerConnection>
+	</scm>
+	<prerequisites></prerequisites>
+	<repositories>
+		<!-- For testing against latest Spring snapshots -->
+		<repository>
+			<id>org.springframework.maven.snapshot</id>
+			<name>Spring Maven Snapshot Repository</name>
+			<url>https://maven.springframework.org/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<!-- For developing against latest Spring milestones -->
+		<repository>
+			<id>org.springframework.maven.milestone</id>
+			<name>Spring Maven Milestone Repository</name>
+			<url>https://maven.springframework.org/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories></pluginRepositories>
+	<distributionManagement>
+		<repository>
+			<id>maven.grundid.de</id>
+			<url>scp://maven.grundid.de/repo/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>maven.grundid.de</id>
+			<url>scp://maven.grundid.de/repo/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+	<profiles>
+		<profile>
+			<id>build-prd</id>
+			<properties>
+				<oauth.callbackUrl>https://ae.osmsurround.org/ae/oauth</oauth.callbackUrl>
+				<war.file.name>ROOT</war.file.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>build-test</id>
+			<properties>
+				<oauth.callbackUrl>https://ae.osmsurround.org/TEST/ae/oauth</oauth.callbackUrl>
+				<war.file.name>TEST</war.file.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>osm-prd</id>
+			<properties>
+				<osm.api.base.url>https://api.openstreetmap.org</osm.api.base.url>
+				<oauth.requestTokenEndpointUrl>https://www.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
+				<oauth.accessTokenEndpointUrl>https://www.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
+				<oauth.authorizeWebsiteUrl>https://www.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
+			</properties>
+		</profile>
+		<profile>
+			<id>ae-postgresql</id>
+			<properties>
+				<db.driver>org.postgresql.Driver</db.driver>
+				<db.url>jdbc:postgresql://localhost/ae</db.url>
+				<db.user>osm</db.user>
+				<db.password>osm</db.password>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+					<version>8.4-702.jdbc4</version>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 </project>
