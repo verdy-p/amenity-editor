@@ -9,7 +9,7 @@
 	<artifactId>amenity-editor</artifactId>
 	<version>0.94-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<parent></parent>
+	<!--<parent></parent>-->
 	<dependencyManagement></dependencyManagement>
 	<dependencies>
 		<!-- Spring -->
