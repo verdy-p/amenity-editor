@@ -17,7 +17,8 @@
 	<!-- Package Basics -->
 	<groupId>org.osmsurround</groupId><artifactId>amenity-editor</artifactId><version>0.94-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<parent></parent><dependencyManagement></dependencyManagement>
+	<!--<parent></parent>-->
+	<dependencyManagement></dependencyManagement>
 	<dependencies>
 		<!-- Spring -->
 		<dependency><groupId>org.springframework</groupId><artifactId>spring-webmvc</artifactId><version>${org.springframework-version}</version><exclusions>
