@@ -80,49 +80,6 @@
 
 	<!-- Build Settings -->
 	<build>
-		<extensions>
-			<extension><groupId>org.apache.maven.wagon</groupId><artifactId>wagon-ssh</artifactId><version>2.2</version></extension>
-		</extensions>
-		<plugins>
-			<plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-enforcer-plugin</artifactId><version>3.0.0-M3</version>
-				<configuration>
-					<source>${java-version}</source>
-					<target>${java-version}</target>
-				</configuration>
-			</plugin>
-			<plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-release-plugin</artifactId>
-				<configuration>
-					<arguments>-Pbuild-prd,osm-prd,ae-postgresql,osm-oauth</arguments>
-					<useReleaseProfile>false</useReleaseProfile><releaseProfiles>build-prd,osm-prd,ae-postgresql,osm-oauth</releaseProfiles>
-				</configuration>
-			</plugin>
-			<plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-war-plugin</artifactId><version>2.1.1</version>
-				<configuration><warName>${war.file.name}</warName></configuration>
-			</plugin>
-			<plugin><groupId>org.jvnet.jaxb2.maven2</groupId><artifactId>maven-jaxb2-plugin</artifactId><version>0.8.0</version>
-				<configuration>
-					<schemaDirectory>src/main/schema</schemaDirectory>
-				</configuration>
-				<executions>
-					<execution><id>generate-osm</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<schemaIncludes><include>osm-0.6.xsd</include></schemaIncludes>
-							<generatePackage>org.osm.schema</generatePackage>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin><groupId>com.mycila.maven-license-plugin</groupId><artifactId>maven-license-plugin</artifactId><version>1.9.0</version>
-				<configuration>
-					<header>LICENSE.txt</header>
-					<strictCheck>true</strictCheck>
-					<includes><include>src/main/java/**</include></includes>
-				</configuration>
-			</plugin>
-		</plugins>
 		<resources>
 			<resource><directory>src/main/resources</directory><filtering>true</filtering></resource>
 		</resources>
@@ -140,27 +97,9 @@
 		<developerConnection>scm:git:ssh://git@github.com/grundid/amenity-editor.git</developerConnection>
 	</scm>
 	<prerequisites></prerequisites>
-	<repositories>
-		<!-- For testing against latest Spring snapshots -->
-		<repository><id>org.springframework.maven.snapshot</id>
-			<url>https://maven.springframework.org/snapshot</url>
-			<name>Spring Maven Snapshot Repository</name>
-			<releases><enabled>false</enabled></releases>
-			<snapshots><enabled>true</enabled></snapshots>
-		</repository>
-		<!-- For developing against latest Spring milestones -->
-		<repository><id>org.springframework.maven.milestone</id>
-			<url>https://maven.springframework.org/milestone</url>
-			<name>Spring Maven Milestone Repository</name>
-			<releases><enabled>true</enabled></releases>
-			<snapshots><enabled>false</enabled></snapshots>
-		</repository>
-	</repositories>
+	<repositories></repositories>
 	<pluginRepositories></pluginRepositories>
-	<distributionManagement>
-		<repository><id>maven.grundid.de</id><url>scp://maven.grundid.de/repo/releases</url></repository>
-		<snapshotRepository><id>maven.grundid.de</id><url>scp://maven.grundid.de/repo/snapshots</url></snapshotRepository>
-	</distributionManagement>
+	<distributionManagement></distributionManagement>
 	<profiles>
 		<profile><id>build-prd</id>
 			<properties>
