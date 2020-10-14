@@ -21,17 +21,22 @@
 	<dependencyManagement></dependencyManagement>
 	<dependencies>
 		<!-- Spring -->
-		<dependency><groupId>org.springframework</groupId><artifactId>spring-webmvc</artifactId><version>${org.springframework-version}</version><exclusions>
+		<dependency><groupId>org.springframework</groupId><artifactId>spring-webmvc</artifactId><version>${org.springframework-version}</version>
+			<exclusions>
 				<exclusion><artifactId>commons-logging</artifactId><groupId>commons-logging</groupId></exclusion>
-		</exclusions></dependency>
-		<dependency><groupId>org.springframework</groupId><artifactId>spring-jdbc</artifactId><version>${org.springframework-version}</version><exclusions>
+			</exclusions>
+		</dependency>
+		<dependency><groupId>org.springframework</groupId><artifactId>spring-jdbc</artifactId><version>${org.springframework-version}</version>
+			<exclusions>
 				<exclusion><artifactId>commons-logging</artifactId><groupId>commons-logging</groupId></exclusion>
-		</exclusions></dependency>
+			</exclusions>
+		</dependency>
 		<!-- Logging -->
 		<dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId><version>${org.slf4j-version}</version></dependency>
 		<dependency><groupId>org.slf4j</groupId><artifactId>jcl-over-slf4j</artifactId><version>${org.slf4j-version}</version></dependency>
 		<dependency><groupId>org.slf4j</groupId><artifactId>slf4j-log4j12</artifactId><version>${org.slf4j-version}</version></dependency>
-		<dependency><groupId>log4j</groupId><artifactId>log4j</artifactId><version>1.2.17</version><exclusions>
+		<dependency><groupId>log4j</groupId><artifactId>log4j</artifactId><version>1.2.17</version>
+			<exclusions>
 				<exclusion><groupId>javax.mail</groupId><artifactId>mail</artifactId></exclusion>
 				<exclusion><groupId>javax.jms</groupId><artifactId>jms</artifactId></exclusion>
 				<exclusion><groupId>com.sun.jdmk</groupId><artifactId>jmxtools</artifactId></exclusion>
@@ -86,7 +91,8 @@
 				</configuration>
 			</plugin>
 			<plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-release-plugin</artifactId>
-				<configuration><arguments>-Pbuild-prd,osm-prd,ae-postgresql,osm-oauth</arguments>
+				<configuration>
+					<arguments>-Pbuild-prd,osm-prd,ae-postgresql,osm-oauth</arguments>
 					<useReleaseProfile>false</useReleaseProfile><releaseProfiles>build-prd,osm-prd,ae-postgresql,osm-oauth</releaseProfiles>
 				</configuration>
 			</plugin>
@@ -94,14 +100,20 @@
 				<configuration><warName>${war.file.name}</warName></configuration>
 			</plugin>
 			<plugin><groupId>org.jvnet.jaxb2.maven2</groupId><artifactId>maven-jaxb2-plugin</artifactId><version>0.8.0</version>
-				<configuration><schemaDirectory>src/main/schema</schemaDirectory></configuration>
-				<executions><execution><id>generate-osm</id>
-						<goals><goal>generate</goal></goals>
+				<configuration>
+					<schemaDirectory>src/main/schema</schemaDirectory>
+				</configuration>
+				<executions>
+					<execution><id>generate-osm</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
 						<configuration>
 							<schemaIncludes><include>osm-0.6.xsd</include></schemaIncludes>
 							<generatePackage>org.osm.schema</generatePackage>
 						</configuration>
-				</execution></executions>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin><groupId>com.mycila.maven-license-plugin</groupId><artifactId>maven-license-plugin</artifactId><version>1.9.0</version>
 				<configuration>
@@ -111,8 +123,12 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<resources><resource><directory>src/main/resources</directory><filtering>true</filtering></resource></resources>
-		<testResources><testResource><directory>src/test/resources</directory><filtering>true</filtering></testResource></testResources>
+		<resources>
+			<resource><directory>src/main/resources</directory><filtering>true</filtering></resource>
+		</resources>
+		<testResources>
+			<testResource><directory>src/test/resources</directory><filtering>true</filtering></testResource>
+		</testResources>
 	</build>
 	<reporting></reporting>
 
@@ -120,16 +136,24 @@
 	<issueManagement></issueManagement>
 	<ciManagement></ciManagement>
 	<mailingLists></mailingLists>
-	<scm><developerConnection>scm:git:ssh://git@github.com/grundid/amenity-editor.git</developerConnection></scm>
+	<scm>
+		<developerConnection>scm:git:ssh://git@github.com/grundid/amenity-editor.git</developerConnection>
+	</scm>
 	<prerequisites></prerequisites>
 	<repositories>
 		<!-- For testing against latest Spring snapshots -->
-		<repository><id>org.springframework.maven.snapshot</id><url>https://maven.springframework.org/snapshot</url><name>Spring Maven Snapshot Repository</name>
-			<releases><enabled>false</enabled></releases><snapshots><enabled>true</enabled></snapshots>
+		<repository><id>org.springframework.maven.snapshot</id>
+			<url>https://maven.springframework.org/snapshot</url>
+			<name>Spring Maven Snapshot Repository</name>
+			<releases><enabled>false</enabled></releases>
+			<snapshots><enabled>true</enabled></snapshots>
 		</repository>
 		<!-- For developing against latest Spring milestones -->
-		<repository><id>org.springframework.maven.milestone</id><url>https://maven.springframework.org/milestone</url><name>Spring Maven Milestone Repository</name>
-			<releases><enabled>true</enabled></releases><snapshots><enabled>false</enabled></snapshots>
+		<repository><id>org.springframework.maven.milestone</id>
+			<url>https://maven.springframework.org/milestone</url>
+			<name>Spring Maven Milestone Repository</name>
+			<releases><enabled>true</enabled></releases>
+			<snapshots><enabled>false</enabled></snapshots>
 		</repository>
 	</repositories>
 	<pluginRepositories></pluginRepositories>
@@ -159,8 +183,11 @@
 			</properties>
 		</profile>
 		<profile><id>ae-postgresql</id>
-			<dependencies><dependency><groupId>postgresql</groupId><artifactId>postgresql</artifactId><version>8.4-702.jdbc4</version></dependency></dependencies>
-			<properties><db.driver>org.postgresql.Driver</db.driver>
+			<dependencies>
+				<dependency><groupId>postgresql</groupId><artifactId>postgresql</artifactId><version>8.4-702.jdbc4</version></dependency>
+			</dependencies>
+			<properties>
+				<db.driver>org.postgresql.Driver</db.driver>
 				<db.url>jdbc:postgresql://localhost/ae</db.url>
 				<db.user>osm</db.user>
 				<db.password>osm</db.password>
