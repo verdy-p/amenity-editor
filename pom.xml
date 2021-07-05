@@ -35,14 +35,7 @@
 		<dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId><version>${org.slf4j-version}</version></dependency>
 		<dependency><groupId>org.slf4j</groupId><artifactId>jcl-over-slf4j</artifactId><version>${org.slf4j-version}</version></dependency>
 		<dependency><groupId>org.slf4j</groupId><artifactId>slf4j-log4j12</artifactId><version>${org.slf4j-version}</version></dependency>
-		<dependency><groupId>log4j</groupId><artifactId>log4j</artifactId><version>1.2.17</version>
-			<exclusions>
-				<exclusion><groupId>javax.mail</groupId><artifactId>mail</artifactId></exclusion>
-				<exclusion><groupId>javax.jms</groupId><artifactId>jms</artifactId></exclusion>
-				<exclusion><groupId>com.sun.jdmk</groupId><artifactId>jmxtools</artifactId></exclusion>
-				<exclusion><groupId>com.sun.jmx</groupId><artifactId>jmxri</artifactId></exclusion>
-			</exclusions>
-		</dependency>
+		<dependency><groupId>org.apache.logging.log4j</groupId><artifactId>${org.apache.logging.log4j-version}</artifactId><version>2.14.1</version></dependency>
 		<!-- Servlet -->
 		<dependency><groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId><version>2.5</version><scope>provided</scope></dependency>
 		<dependency><groupId>javax.servlet.jsp</groupId><artifactId>jsp-api</artifactId><version>2.1</version><scope>provided</scope></dependency>
@@ -65,6 +58,7 @@
 		<java-version>1.8</java-version>
 		<org.springframework-version>5.3.8</org.springframework-version>
 		<org.slf4j-version>1.7.30</org.slf4j-version>
+		<org.apache.logging.log4j-version>2.14.1<org.apache.logging.log4j-version>
 		<war.file.name>amenity-editor</war.file.name>
 		<db.driver>org.h2.Driver</db.driver>
 		<db.url>jdbc:h2:mem:ae;INIT=RUNSCRIPT FROM 'classpath:database.sql'</db.url>
