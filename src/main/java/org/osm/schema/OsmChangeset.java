@@ -48,22 +48,30 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class OsmChangeset {
 
     protected List<OsmTag> tag;
+
     @XmlAttribute(name = "id")
     @XmlSchemaType(name = "unsignedLong")
-    protected long id;
+    protected Long id;
+
     @XmlAttribute(name = "created_at")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar createdAt;
+
     @XmlAttribute(name = "open")
     protected Boolean open;
+
     @XmlAttribute(name = "user")
     protected String user;
+
     @XmlAttribute(name = "min_lat")
     protected Float minLat;
+
     @XmlAttribute(name = "min_lon")
     protected Float minLon;
+
     @XmlAttribute(name = "max_lat")
     protected Float maxLat;
+
     @XmlAttribute(name = "max_lon")
     protected Float maxLon;
 
@@ -99,9 +107,9 @@ public class OsmChangeset {
      * 
      * @return
      *     possible object is
-     *     {@link long }
+     *     {@link Long }
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -110,9 +118,9 @@ public class OsmChangeset {
      * 
      * @param value
      *     allowed object is
-     *     {@link long }
+     *     {@link Long }
      */
-    public void setId(long value) {
+    public void setId(Long value) {
         this.id = value;
     }
 
