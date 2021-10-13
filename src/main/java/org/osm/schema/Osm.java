@@ -53,13 +53,20 @@ import javax.xml.bind.annotation.XmlType;
 public class Osm {
 
     protected List<OsmBound> bound;
+
     protected List<OsmNode> node;
+
     protected List<OsmWay> way;
+
     protected List<OsmRelation> relation;
+
     protected List<OsmChangeset> changeset;
+
     protected OsmUser user;
+
     @XmlAttribute(name = "version", required = true)
     protected BigDecimal version;
+
     @XmlAttribute(name = "generator", required = true)
     protected String generator;
 
