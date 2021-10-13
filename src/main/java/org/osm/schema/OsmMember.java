@@ -6,8 +6,6 @@
 //
 package org.osm.schema;
 
-import java.math.BigInteger;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -37,9 +35,11 @@ public class OsmMember {
 
     @XmlAttribute(name = "role")
     protected String role;
+
     @XmlAttribute(name = "ref", required = true)
     @XmlSchemaType(name = "unsignedLong")
-    protected BigInteger ref;
+    protected Long ref;
+
     @XmlAttribute(name = "type", required = true)
     protected OsmType type;
 
@@ -70,9 +70,9 @@ public class OsmMember {
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link Long }
      */
-    public BigInteger getRef() {
+    public Long getRef() {
         return ref;
     }
 
@@ -81,9 +81,9 @@ public class OsmMember {
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link Long }
      */
-    public void setRef(BigInteger value) {
+    public void setRef(Long value) {
         this.ref = value;
     }
 
