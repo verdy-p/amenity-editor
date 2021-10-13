@@ -51,7 +51,7 @@ public class OsmNode {
     
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "unsignedLong")
-    protected long id;
+    protected Long id;
     
     @XmlAttribute(name = "timestamp")
     @XmlSchemaType(name = "dateTime")
@@ -65,11 +65,11 @@ public class OsmNode {
     
     @XmlAttribute(name = "changeset", required = true)
     @XmlSchemaType(name = "unsignedLong")
-    protected long changeset;
+    protected Long changeset;
     
     @XmlAttribute(name = "version")
     @XmlSchemaType(name = "unsignedLong")
-    protected long version;
+    protected Long version;
     
     @XmlAttribute(name = "lat", required = true)
     protected float lat;
@@ -109,9 +109,9 @@ public class OsmNode {
      * 
      * @return
      *     possible object is
-     *     {@link long }
+     *     {@link Long }
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -120,9 +120,9 @@ public class OsmNode {
      * 
      * @param value
      *     allowed object is
-     *     {@link long }
+     *     {@link Long }
      */
-    public void setId(long value) {
+    public void setId(Long value) {
         this.id = value;
     }
 
@@ -197,9 +197,9 @@ public class OsmNode {
      * 
      * @return
      *     possible object is
-     *     {@link long }
+     *     {@link Long }
      */
-    public long getChangeset() {
+    public Long getChangeset() {
         return changeset;
     }
 
@@ -208,9 +208,9 @@ public class OsmNode {
      * 
      * @param value
      *     allowed object is
-     *     {@link long }
+     *     {@link Long }
      */
-    public void setChangeset(long value) {
+    public void setChangeset(Long value) {
         this.changeset = value;
     }
 
@@ -219,9 +219,9 @@ public class OsmNode {
      * 
      * @return
      *     possible object is
-     *     {@link long }
+     *     {@link Long }
      */
-    public long getVersion() {
+    public Long getVersion() {
         return version;
     }
 
@@ -230,9 +230,9 @@ public class OsmNode {
      * 
      * @param value
      *     allowed object is
-     *     {@link long }
+     *     {@link Long }
      */
-    public void setVersion(long value) {
+    public void setVersion(Long value) {
         this.version = value;
     }
 
