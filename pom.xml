@@ -3,7 +3,6 @@
 	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<!-- Project Information -->
 	<name>amenity-editor</name>
 	<description/>
@@ -13,7 +12,6 @@
 	<organization/>
 	<developers/>
 	<contributors/>
-
 	<!-- Package Basics -->
 	<groupId>org.osmsurround</groupId><artifactId>amenity-editor</artifactId><version>0.94-SNAPSHOT</version>
 	<packaging>war</packaging>
@@ -57,19 +55,16 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<war.file.name>amenity-editor</war.file.name>
+		<java-version>1.8</java-version>
 		<maven-version>3.0</maven-version>
 		<maven-enforcer-plugin-version>3.0.0</maven-enforcer-plugin-version>
-		<java-version>1.8</java-version>
 		<org.springframework-version>5.3.10</org.springframework-version>
 		<org.slf4j-version>1.7.31</org.slf4j-version>
 		<org.apache.logging.log4j-version>2.14.1</org.apache.logging.log4j-version>
-
 		<db.driver>org.h2.Driver</db.driver>
 		<db.url>jdbc:h2:mem:ae;INIT=RUNSCRIPT FROM 'classpath:database.sql'</db.url>
 		<db.user>sa</db.user><db.password>sa</db.password>
-
 		<osm.api.base.url>https://api06.dev.openstreetmap.org</osm.api.base.url>
-
 		<oauth.requestTokenEndpointUrl>https://api06.dev.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
 		<oauth.accessTokenEndpointUrl>https://api06.dev.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
 		<oauth.authorizeWebsiteUrl>https://api06.dev.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
@@ -77,7 +72,6 @@
 		<oauth.consumerKey/>
 		<oauth.consumerSecret/>
 	</properties>
-
 	<!-- Build Settings -->
 	<build>
 		<plugins>
@@ -87,33 +81,21 @@
 				<version>${maven-enforcer-plugin-version}</version>
 				<executions>
 					<execution>
-						<id>enforce-java</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
+						<id>enforce</id>
 						<configuration>
 							<rules>
-							<requireJavaVersion>
-								<version>${java-version}</version>
-							</requireJavaVersion>
-							</rules>
-						</configuration>
-					</execution>
-					<execution>
-						<id>enforce-maven</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<requireMavenVersion>
-									<version>${maven-version}</version>
-								</requireMavenVersion>
+								<dependencyConvergence/>
 								<requireJavaVersion>
 									<version>${java-version}</version>
 								</requireJavaVersion>
+								<requireMavenVersion>
+									<version>${maven-version}</version>
+								</requireMavenVersion>
 							</rules>    
 						</configuration>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
