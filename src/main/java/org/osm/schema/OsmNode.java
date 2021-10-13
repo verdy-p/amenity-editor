@@ -6,7 +6,6 @@
 //
 package org.osm.schema;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,24 +48,32 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class OsmNode {
 
     protected List<OsmTag> tag;
+    
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "unsignedLong")
-    protected BigInteger id;
+    protected long id;
+    
     @XmlAttribute(name = "timestamp")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar timestamp;
+    
     @XmlAttribute(name = "visible")
     protected Boolean visible;
+    
     @XmlAttribute(name = "user")
     protected String user;
+    
     @XmlAttribute(name = "changeset", required = true)
     @XmlSchemaType(name = "unsignedLong")
-    protected BigInteger changeset;
+    protected long changeset;
+    
     @XmlAttribute(name = "version")
     @XmlSchemaType(name = "unsignedLong")
-    protected BigInteger version;
+    protected long version;
+    
     @XmlAttribute(name = "lat", required = true)
     protected float lat;
+    
     @XmlAttribute(name = "lon", required = true)
     protected float lon;
 
@@ -102,9 +109,9 @@ public class OsmNode {
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link long }
      */
-    public BigInteger getId() {
+    public long getId() {
         return id;
     }
 
@@ -113,9 +120,9 @@ public class OsmNode {
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link long }
      */
-    public void setId(BigInteger value) {
+    public void setId(long value) {
         this.id = value;
     }
 
@@ -190,9 +197,9 @@ public class OsmNode {
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link long }
      */
-    public BigInteger getChangeset() {
+    public long getChangeset() {
         return changeset;
     }
 
@@ -201,9 +208,9 @@ public class OsmNode {
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link long }
      */
-    public void setChangeset(BigInteger value) {
+    public void setChangeset(long value) {
         this.changeset = value;
     }
 
@@ -212,9 +219,9 @@ public class OsmNode {
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link long }
      */
-    public BigInteger getVersion() {
+    public long getVersion() {
         return version;
     }
 
@@ -223,9 +230,9 @@ public class OsmNode {
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link long }
      */
-    public void setVersion(BigInteger value) {
+    public void setVersion(long value) {
         this.version = value;
     }
 
