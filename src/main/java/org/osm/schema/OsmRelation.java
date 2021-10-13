@@ -6,7 +6,6 @@
 //
 package org.osm.schema;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,15 +65,15 @@ public class OsmRelation {
     
     @XmlAttribute(name = "id", required = true)
     @XmlSchemaType(name = "unsignedLong")
-    protected BigInteger id;
+    protected Long id;
     
     @XmlAttribute(name = "changeset")
     @XmlSchemaType(name = "unsignedLong")
-    protected BigInteger changeset;
+    protected Long changeset;
     
     @XmlAttribute(name = "version")
     @XmlSchemaType(name = "unsignedLong")
-    protected BigInteger version;
+    protected Long version;
 
     /**
      * Gets the value of the member property.
@@ -199,9 +198,9 @@ public class OsmRelation {
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link Long }
      */
-    public BigInteger getId() {
+    public Long getId() {
         return id;
     }
 
@@ -210,10 +209,10 @@ public class OsmRelation {
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link Long }
      *     
      */
-    public void setId(BigInteger value) {
+    public void setId(Long value) {
         this.id = value;
     }
 
@@ -222,9 +221,9 @@ public class OsmRelation {
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link Long }
      */
-    public BigInteger getChangeset() {
+    public Long getChangeset() {
         return changeset;
     }
 
@@ -233,9 +232,9 @@ public class OsmRelation {
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link Long }
      */
-    public void setChangeset(BigInteger value) {
+    public void setChangeset(Long value) {
         this.changeset = value;
     }
 
@@ -244,9 +243,9 @@ public class OsmRelation {
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link Long }
      */
-    public BigInteger getVersion() {
+    public Long getVersion() {
         return version;
     }
 
@@ -255,9 +254,9 @@ public class OsmRelation {
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link Long }
      */
-    public void setVersion(BigInteger value) {
+    public void setVersion(Long value) {
         this.version = value;
     }
 
