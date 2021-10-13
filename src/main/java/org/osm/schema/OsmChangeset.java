@@ -6,7 +6,6 @@
 //
 package org.osm.schema;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class OsmChangeset {
     protected List<OsmTag> tag;
     @XmlAttribute(name = "id")
     @XmlSchemaType(name = "unsignedLong")
-    protected BigInteger id;
+    protected long id;
     @XmlAttribute(name = "created_at")
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar createdAt;
@@ -100,9 +99,9 @@ public class OsmChangeset {
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link long }
      */
-    public BigInteger getId() {
+    public long getId() {
         return id;
     }
 
@@ -111,9 +110,9 @@ public class OsmChangeset {
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link long }
      */
-    public void setId(BigInteger value) {
+    public void setId(long value) {
         this.id = value;
     }
 
