@@ -56,15 +56,20 @@
 	<modules/>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<war.file.name>amenity-editor</war.file.name>
+		<maven-version>3.0</maven-version>
+		<maven-enforcer-plugin-version>3.0.0</maven-enforcer-plugin-version>
 		<java-version>1.8</java-version>
 		<org.springframework-version>5.3.10</org.springframework-version>
 		<org.slf4j-version>1.7.31</org.slf4j-version>
 		<org.apache.logging.log4j-version>2.14.1</org.apache.logging.log4j-version>
-		<war.file.name>amenity-editor</war.file.name>
+
 		<db.driver>org.h2.Driver</db.driver>
 		<db.url>jdbc:h2:mem:ae;INIT=RUNSCRIPT FROM 'classpath:database.sql'</db.url>
 		<db.user>sa</db.user><db.password>sa</db.password>
+
 		<osm.api.base.url>https://api06.dev.openstreetmap.org</osm.api.base.url>
+
 		<oauth.requestTokenEndpointUrl>https://api06.dev.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
 		<oauth.accessTokenEndpointUrl>https://api06.dev.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
 		<oauth.authorizeWebsiteUrl>https://api06.dev.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
@@ -76,30 +81,29 @@
 	<!-- Build Settings -->
 	<build>
 		<plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <id>enforce-maven</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <requireMavenVersion>
-                  <version>3.0</version>
-                </requireMavenVersion>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>${maven-enforcer-plugin-version}</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>${maven-version}</version>
+								</requireMavenVersion>
 								<requireJavaVersion>
-									<version>1.8.0</version>
+									<version>${java-version}</version>
 								</requireJavaVersion>
-              </rules>    
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
+							</rules>    
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<resources>
 			<resource><directory>src/main/resources</directory><filtering>true</filtering></resource>
