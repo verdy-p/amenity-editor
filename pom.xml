@@ -22,12 +22,11 @@
 		<maven-enforcer-plugin-version>3.0.0</maven-enforcer-plugin-version>
 		<maven.compiler.source>${java-version}</maven.compiler.source>
 		<maven.compiler.target>${java-version}</maven.compiler.target>
-
 		<org.springframework-version>5.3.10</org.springframework-version>
 		<jaxb-version>2.3.5</jaxb-version>
 
-		<junit-version>4.13.1</junit-version>
-		<org.slf4j-version>1.7.31</org.slf4j-version>
+    <junit-version>4.13.1</junit-version>
+		<org.slf4j-version>1.7.32</org.slf4j-version>
 		<org.apache.logging.log4j-version>2.14.1</org.apache.logging.log4j-version>
 		<db.driver>org.h2.Driver</db.driver>
 		<db.url>jdbc:h2:mem:ae;INIT=RUNSCRIPT FROM 'classpath:database.sql'</db.url>
