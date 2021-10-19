@@ -468,11 +468,16 @@ Object.extend(String.prototype, {
   },
 
   underscore: function() {
-    return this.gsub(/::/, '/').gsub(/([A-Z]+)([A-Z][a-z])/,'#{1}_#{2}').gsub(/([a-z\d])([A-Z])/,'#{1}_#{2}').gsub(/-/,'_').toLowerCase();
+    return this
+      .gsub(/::/, '/')
+      .gsub(/([A-Z]+)([A-Z][a-z])/, '#{1}_#{2}')
+      .gsub(/([a-z\d])([A-Z])/, '#{1}_#{2}')
+      .gsub(/-/, '_')
+      .toLowerCase();
   },
 
   dasherize: function() {
-    return this.gsub(/_/,'-');
+    return this.gsub(/_/, '-');
   },
 
   inspect: function(useDoubleQuotes) {
@@ -480,7 +485,7 @@ Object.extend(String.prototype, {
       var character = String.specialChar[match[0]];
       return character ? character : '\\u00' + match[0].charCodeAt().toPaddedString(2, 16);
     });
-    if (useDoubleQuotes) return '"' + escapedString.replace(/"/g, '\\"') + '"';
+    if (useDoubleQuotes) return '"' + escapedString.replace(/([\\"])/g, '\\\1') + '"';
     return "'" + escapedString.replace(/'/g, '\\\'') + "'";
   },
 
@@ -535,10 +540,10 @@ Object.extend(String.prototype, {
 
 if (Prototype.Browser.WebKit || Prototype.Browser.IE) Object.extend(String.prototype, {
   escapeHTML: function() {
-    return this.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return this.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   },
   unescapeHTML: function() {
-    return this.stripTags().replace(/&gt;/g,'>').replace(/&lt;/g,'<').replace(/&amp;/g,'&');
+    return this.stripTags().replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&');
   }
 });
 
@@ -1265,7 +1270,7 @@ Ajax.Request = Class.create(Ajax.Base, {
        * Content-length header. See Mozilla Bugzilla #246651.
        */
       if (this.transport.overrideMimeType &&
-          (navigator.userAgent.match(/Gecko\/(\d{4})/) || [0,2005])[1] < 2005)
+          (navigator.userAgent.match(/Gecko\/(\d{4})/) || [0, 2005])[1] < 2005)
             headers['Connection'] = 'close';
     }
 
@@ -2136,7 +2141,7 @@ Element.Methods = {
     element = $(element);
     var delta = [0, 0];
     var parent = null;
-    // delta [0,0] will do fine with position: fixed elements,
+    // delta [0, 0] will do fine with position: fixed elements,
     // position:absolute needs offsetParent deltas
     if (Element.getStyle(element, 'position') == 'absolute') {
       parent = element.getOffsetParent();
@@ -2241,7 +2246,7 @@ else if (Prototype.Browser.IE) {
       function(proceed, element) {
         element = $(element);
         try { element.offsetParent }
-        catch(e) { return Element._returnOffset(0,0) }
+        catch(e) { return Element._returnOffset(0, 0) }
         var position = element.getStyle('position');
         if (position !== 'static') return proceed(element);
         // Trigger hasLayout on the offset parent so that IE6 reports
@@ -2260,7 +2265,7 @@ else if (Prototype.Browser.IE) {
   Element.Methods.cumulativeOffset = Element.Methods.cumulativeOffset.wrap(
     function(proceed, element) {
       try { element.offsetParent }
-      catch(e) { return Element._returnOffset(0,0) }
+      catch(e) { return Element._returnOffset(0, 0) }
       return proceed(element);
     }
   );
@@ -2287,7 +2292,7 @@ else if (Prototype.Browser.IE) {
 
   Element.Methods.setOpacity = function(element, value) {
     function stripAlpha(filter){
-      return filter.replace(/alpha\([^\)]*\)/gi,'');
+      return filter.replace(/alpha\([^\)]*\)/gi, '');
     }
     element = $(element);
     var currentStyle = element.currentStyle;
