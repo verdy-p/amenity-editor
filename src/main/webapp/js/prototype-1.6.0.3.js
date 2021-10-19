@@ -486,7 +486,7 @@ Object.extend(String.prototype, {
       return character ? character : '\\u00' + match[0].charCodeAt().toPaddedString(2, 16);
     });
     if (useDoubleQuotes) return '"' + escapedString.replace(/([\\"])/g, '\\\1') + '"';
-    return "'" + escapedString.replace(/'/g, '\\\'') + "'";
+    return "'" + escapedString.replace(/([\\'])/g, '\\\1') + "'";
   },
 
   toJSON: function() {
