@@ -383,7 +383,7 @@ Object.extend(String.prototype, {
   },
 
   stripTags: function() {
-    return this.replace(/<\/?[^>]+>/gi, '');
+    return this.replace(/<\/?[^>]+>?/g, '');
   },
 
   stripScripts: function() {
