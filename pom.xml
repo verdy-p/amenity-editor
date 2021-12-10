@@ -27,7 +27,7 @@
 
     <junit-version>4.13.1</junit-version>
 		<org.slf4j-version>1.7.32</org.slf4j-version>
-		<org.apache.logging.log4j-version>2.14.1</org.apache.logging.log4j-version>
+		<org.apache.logging.log4j-version>2.15.0</org.apache.logging.log4j-version>
 		<db.driver>org.h2.Driver</db.driver>
 		<db.url>jdbc:h2:mem:ae;INIT=RUNSCRIPT FROM 'classpath:database.sql'</db.url>
 		<db.user>sa</db.user><db.password>sa</db.password>
