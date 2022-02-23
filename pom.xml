@@ -15,35 +15,35 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<war.file.name>amenity-editor</war.file.name>
-
 		<java-version>1.8</java-version>
 		<maven-version>3.0</maven-version>
-		<maven-compiler-plugin-version>3.8.1</maven-compiler-plugin-version>
-		<maven-enforcer-plugin-version>3.0.0</maven-enforcer-plugin-version>
 		<maven.compiler.source>${java-version}</maven.compiler.source>
 		<maven.compiler.target>${java-version}</maven.compiler.target>
-		<org.springframework-version>5.3.10</org.springframework-version>
-		<org.springframework.social-version>1.1.6.RELEASE</org.springframework.social-version>
+		<maven-compiler-plugin-version>3.8.1</maven-compiler-plugin-version>
+		<maven-enforcer-plugin-version>3.0.0</maven-enforcer-plugin-version>
 		<jaxb-version>2.3.0</jaxb-version>
 		<junit-version>4.13.1</junit-version>
-		<org.slf4j-version>1.7.32</org.slf4j-version>
+		<org.springframework-version>5.3.14</org.springframework-version>
+		<org.springframework.social-version>1.1.6.RELEASE</org.springframework.social-version>
 		<org.apache.logging.log4j-version>2.17.1</org.apache.logging.log4j-version>
+		<org.slf4j-version>1.7.32</org.slf4j-version>
+		<oauth.signpost-version>2.1.1</oauth.signpost-version>
+		<osm.api.base.url>https://api06.dev.openstreetmap.org</osm.api.base.url>
+		<oauth.accessTokenEndpointUrl>${osm.api.base.url}/oauth/access_token</oauth.accessTokenEndpointUrl>
+		<oauth.authorizeWebsiteUrl>${osm.api.base.url}/oauth/authorize</oauth.authorizeWebsiteUrl>
+		<oauth.requestTokenEndpointUrl>${osm.api.base.url}/oauth/request_token</oauth.requestTokenEndpointUrl>
+		<oauth.callbackUrl>http://localhost:8080/amenity-editor/ae/oauth</oauth.callbackUrl>
+		<oauth.consumerKey/>
+		<oauth.consumerSecret/>
 		<com.h2database-version>2.1.210</com.h2database-version>
 		<db.driver>org.h2.Driver</db.driver>
 		<db.url>jdbc:h2:mem:ae;INIT=RUNSCRIPT FROM 'classpath:database.sql'</db.url>
 		<db.user>sa</db.user><db.password>sa</db.password>
-		<osm.api.base.url>https://api06.dev.openstreetmap.org</osm.api.base.url>
-		<oauth.requestTokenEndpointUrl>https://api06.dev.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
-		<oauth.accessTokenEndpointUrl>https://api06.dev.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
-		<oauth.authorizeWebsiteUrl>https://api06.dev.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
-		<oauth.callbackUrl>http://localhost:8080/amenity-editor/ae/oauth</oauth.callbackUrl>
-		<oauth.consumerKey/>
-		<oauth.consumerSecret/>
 	</properties>
 	<!-- Package Basics -->
 	<groupId>org.osmsurround</groupId><artifactId>amenity-editor</artifactId><version>0.94-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<!--<parent></parent>-->
+	<parent/>
 	<dependencyManagement/>
 	<dependencies>
 		<!-- Spring -->
@@ -62,26 +62,26 @@
 		<dependency><groupId>com.sun.xml.bind</groupId><artifactId>jaxb-core</artifactId><version>${jaxb-version}</version></dependency>
 		<dependency><groupId>com.sun.xml.bind</groupId><artifactId>jaxb-impl</artifactId><version>${jaxb-version}</version></dependency>
 		<!-- Logging -->
+		<dependency><groupId>org.apache.logging.log4j</groupId><artifactId>log4j-api</artifactId><version>${org.apache.logging.log4j-version}</version></dependency>
+		<dependency><groupId>org.apache.logging.log4j</groupId><artifactId>log4j-core</artifactId><version>${org.apache.logging.log4j-version}</version></dependency>
 		<dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId><version>${org.slf4j-version}</version></dependency>
 		<dependency><groupId>org.slf4j</groupId><artifactId>jcl-over-slf4j</artifactId><version>${org.slf4j-version}</version></dependency>
 		<dependency><groupId>org.slf4j</groupId><artifactId>slf4j-log4j12</artifactId><version>${org.slf4j-version}</version></dependency>
-		<dependency><groupId>org.apache.logging.log4j</groupId><artifactId>log4j-api</artifactId><version>${org.apache.logging.log4j-version}</version></dependency>
-		<dependency><groupId>org.apache.logging.log4j</groupId><artifactId>log4j-core</artifactId><version>${org.apache.logging.log4j-version}</version></dependency>
 		<!-- Servlet -->
+		<dependency><groupId>javax.servlet</groupId><artifactId>jstl</artifactId><version>1.2</version></dependency>
 		<dependency><groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId><version>2.5</version><scope>provided</scope></dependency>
 		<dependency><groupId>javax.servlet.jsp</groupId><artifactId>jsp-api</artifactId><version>2.1</version><scope>provided</scope></dependency>
-		<dependency><groupId>javax.servlet</groupId><artifactId>jstl</artifactId><version>1.2</version></dependency>
 		<!-- Test -->
-		<dependency><groupId>junit</groupId><artifactId>junit</artifactId><version>4.13.1</version><scope>test</scope></dependency>
 		<dependency><groupId>cglib</groupId><artifactId>cglib</artifactId><version>2.2.2</version></dependency>
 		<dependency><groupId>commons-dbcp</groupId><artifactId>commons-dbcp</artifactId><version>1.4</version></dependency>
 		<dependency><groupId>com.h2database</groupId><artifactId>h2</artifactId><version>${com.h2database-version}</version></dependency>
+		<dependency><groupId>junit</groupId><artifactId>junit</artifactId><version>4.13.1</version><scope>test</scope></dependency>
 		<dependency><groupId>org.apache.httpcomponents</groupId><artifactId>httpclient</artifactId><version>4.5.13</version></dependency>
 		<dependency><groupId>org.codehaus.jackson</groupId><artifactId>jackson-mapper-asl</artifactId><version>1.9.13</version></dependency>
 		<dependency><groupId>org.springframework</groupId><artifactId>spring-test</artifactId><version>${org.springframework-version}</version></dependency>
-		<dependency><groupId>oauth.signpost</groupId><artifactId>signpost-core</artifactId><version>2.1.1</version></dependency>
-		<dependency><groupId>oauth.signpost</groupId><artifactId>signpost-commonshttp4</artifactId><version>2.1.1</version></dependency>
 		<dependency><groupId>org.springframework.social</groupId><artifactId>spring-social-core</artifactId><version>${org.springframework.social-version}</version><scope>test</scope></dependency>
+		<dependency><groupId>oauth.signpost</groupId><artifactId>signpost-core</artifactId><version>${oauth.signpost-version}</version></dependency>
+		<dependency><groupId>oauth.signpost</groupId><artifactId>signpost-commonshttp4</artifactId><version>${oauth.signpost-version}</version></dependency>
 	</dependencies>
 	<modules/>
 	<!-- Build Settings -->
@@ -126,7 +126,6 @@
 		</testResources>
 	</build>
 	<reporting/>
-
 	<!-- Environment Settings -->
 	<issueManagement/>
 	<ciManagement/>
@@ -154,9 +153,9 @@
 		<profile><id>osm-prd</id>
 			<properties>
 				<osm.api.base.url>https://api.openstreetmap.org</osm.api.base.url>
-				<oauth.requestTokenEndpointUrl>https://www.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
-				<oauth.accessTokenEndpointUrl>https://www.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
-				<oauth.authorizeWebsiteUrl>https://www.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
+				<oauth.requestTokenEndpointUrl>${osm.api.base.url}/oauth/request_token</oauth.requestTokenEndpointUrl>
+				<oauth.accessTokenEndpointUrl>${osm.api.base.url}/oauth/access_token</oauth.accessTokenEndpointUrl>
+				<oauth.authorizeWebsiteUrl>${osm.api.base.url}/oauth/authorize</oauth.authorizeWebsiteUrl>
 			</properties>
 		</profile>
 		<profile><id>ae-postgresql</id>
