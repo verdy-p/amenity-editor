@@ -43,7 +43,7 @@
 	<!-- Package Basics -->
 	<groupId>org.osmsurround</groupId><artifactId>amenity-editor</artifactId><version>0.94-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<parent/>
+	<!--<parent></parent>-->
 	<dependencyManagement/>
 	<dependencies>
 		<!-- Spring -->
