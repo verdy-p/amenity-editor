@@ -9,9 +9,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java-version>1.6</java-version>
+		<war.file.name>amenity-editor</war.file.name>
+
 		<org.springframework-version>5.2.21.RELEASE</org.springframework-version>
 		<org.slf4j-version>1.5.10</org.slf4j-version>
-		<war.file.name>amenity-editor</war.file.name>
 
 		<db.driver>org.h2.Driver</db.driver>
 		<db.url>jdbc:h2:mem:ae;INIT=RUNSCRIPT FROM 'classpath:database.sql'</db.url>
@@ -19,14 +20,13 @@
 		<db.password>sa</db.password>
 
 		<oauth.callbackUrl>http://localhost:8080/amenity-editor/ae/oauth</oauth.callbackUrl>
-		<oauth.consumerKey />
-		<oauth.consumerSecret />
+		<oauth.consumerKey/>
+		<oauth.consumerSecret/>
 
 		<osm.api.base.url>http://api06.dev.openstreetmap.org</osm.api.base.url>
 		<oauth.requestTokenEndpointUrl>http://api06.dev.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
 		<oauth.accessTokenEndpointUrl>http://api06.dev.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
 		<oauth.authorizeWebsiteUrl>http://api06.dev.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
-
 	</properties>
 	<profiles>
 		<profile>
@@ -45,12 +45,6 @@
 		</profile>
 		<profile>
 			<id>osm-prd</id>
-			<properties>
-				<osm.api.base.url>http://api.openstreetmap.org</osm.api.base.url>
-				<oauth.requestTokenEndpointUrl>http://www.openstreetmap.org/oauth/request_token</oauth.requestTokenEndpointUrl>
-				<oauth.accessTokenEndpointUrl>http://www.openstreetmap.org/oauth/access_token</oauth.accessTokenEndpointUrl>
-				<oauth.authorizeWebsiteUrl>http://www.openstreetmap.org/oauth/authorize</oauth.authorizeWebsiteUrl>
-			</properties>
 		</profile>
 		<profile>
 			<id>ae-postgresql</id>
@@ -73,6 +67,11 @@
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 			<exclusions>
@@ -93,7 +92,74 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-test</artifactId>
+			<version>1.0.0.RC2</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<!-- OAuth -->
+		<dependency>
+			<groupId>oauth.signpost</groupId>
+			<artifactId>signpost-core</artifactId>
+			<version>1.2.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>oauth.signpost</groupId>
+			<artifactId>signpost-commonshttp4</artifactId>
+			<version>1.2.1.1</version>
+		</dependency>
+		<!-- Components -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.13</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.8.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>2.1.210</version>
+		</dependency>
+		<!-- Test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.1</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -133,80 +199,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-		<!-- Servlet -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
-		</dependency>
-
-		<!-- Test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13.1</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.13</version>
-		</dependency>
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-			<version>2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>oauth.signpost</groupId>
-			<artifactId>signpost-core</artifactId>
-			<version>1.2.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>oauth.signpost</groupId>
-			<artifactId>signpost-commonshttp4</artifactId>
-			<version>1.2.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.8.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.social</groupId>
-			<artifactId>spring-social-test</artifactId>
-			<version>1.0.0.RC2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.4</version>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>2.1.210</version>
-		</dependency>
 	</dependencies>
 	<repositories>
 		<!-- For testing against latest Spring snapshots -->
@@ -231,7 +223,6 @@
 			</snapshots>
 		</repository>
 	</repositories>
-
 	<distributionManagement>
 		<repository>
 			<id>maven.grundid.de</id>
@@ -246,7 +237,6 @@
 		<developerConnection>scm:git:ssh://git@github.com/grundid/amenity-editor.git</developerConnection>
 	</scm>
 	<build>
-	
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
@@ -295,7 +285,6 @@
 					<schemaDirectory>src/main/schema</schemaDirectory>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
