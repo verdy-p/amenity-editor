@@ -1,10 +1,3 @@
-== This project is no longer maintained. ==
-
-
-
-
-
-
 == Amenity Editor for OSM ==
 
 The Amenity Editor is written in Java. It is build using the 
