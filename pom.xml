@@ -11,7 +11,7 @@
 		<java-version>1.6</java-version>
 		<war.file.name>amenity-editor</war.file.name>
 
-		<org.springframework-version>5.2.21.RELEASE</org.springframework-version>
+		<org.springframework-version>5.2.22.RELEASE</org.springframework-version>
 		<org.slf4j-version>1.5.10</org.slf4j-version>
 
 		<db.driver>org.h2.Driver</db.driver>
@@ -19,6 +19,7 @@
 		<db.user>sa</db.user>
 		<db.password>sa</db.password>
 
+		<oauth.signpost-version>2.0.0</oauth.signpost-version>
 		<oauth.callbackUrl>http://localhost:8080/amenity-editor/ae/oauth</oauth.callbackUrl>
 		<oauth.consumerKey/>
 		<oauth.consumerSecret/>
@@ -120,12 +121,12 @@
 		<dependency>
 			<groupId>oauth.signpost</groupId>
 			<artifactId>signpost-core</artifactId>
-			<version>1.2.1.1</version>
+			<version>${oauth.signpost-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>oauth.signpost</groupId>
 			<artifactId>signpost-commonshttp4</artifactId>
-			<version>1.2.1.1</version>
+			<version>${oauth.signpost-version}</version>
 		</dependency>
 		<!-- Components -->
 		<dependency>
