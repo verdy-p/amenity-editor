@@ -11,8 +11,8 @@
 		<java-version>1.6</java-version>
 		<war.file.name>amenity-editor</war.file.name>
 
-		<org.springframework-version>5.2.23.RELEASE</org.springframework-version>
-		<org.slf4j-version>1.7.34</org.slf4j-version>
+		<org.springframework-version>5.2.24.RELEASE</org.springframework-version>
+		<org.slf4j-version>1.7.36</org.slf4j-version>
 
 		<db.driver>org.h2.Driver</db.driver>
 		<db.url>jdbc:h2:mem:ae;INIT=RUNSCRIPT FROM 'classpath:database.sql'</db.url>
