@@ -3388,7 +3388,7 @@ Object.extend(Selector, {
 
   split: function(expression) {
     var expressions = [];
-    expression.scan(/(([\w#:.~>+()\s-]+|\*|\[.*?\])+)\s*(,|$)/, function(m) {
+    expression.scan(/([^,]+)(,|$)/, function(m) {
       expressions.push(m[1].strip());
     });
     return expressions;
