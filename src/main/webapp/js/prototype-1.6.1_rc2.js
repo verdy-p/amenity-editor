@@ -42,7 +42,7 @@ var Prototype = {
     })()
   },
 
-  ScriptFragment: '<script[^>]*>([\\S\\s]*?)<\/script[^>]*>',
+  ScriptFragment: '<script[^>]*>([\\S\\s]*?)<\/script[^\->\w]*>?',
   JSONFilter: /^\/\*-secure-([\s\S]*)\*\/\s*$/,
 
   emptyFunction: function() { },
