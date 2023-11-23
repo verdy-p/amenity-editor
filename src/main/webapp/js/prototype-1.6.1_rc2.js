@@ -476,7 +476,7 @@ Object.extend(String.prototype, (function() {
   }
 
   function stripTags() {
-    return this.replace(/<\/?[^>]+>/gi, '');
+    return this.replace(/<\/?[^>]+>?/gi, '');
   }
 
   function stripScripts() {
