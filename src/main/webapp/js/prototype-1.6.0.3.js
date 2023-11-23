@@ -29,7 +29,7 @@ var Prototype = {
         document.createElement('form')['__proto__']
   },
 
-  ScriptFragment: '<script[^>]*>([\\S\\s]*?)<\/script>',
+  ScriptFragment: '<script[^>]*>([\\S\\s]*?)<\/script[^\->\w]*>?',
   JSONFilter: /^\/\*-secure-([\s\S]*)\*\/\s*$/,
 
   emptyFunction: function() { },
@@ -325,10 +325,12 @@ var PeriodicalExecuter = Class.create({
     }
   }
 });
+
 Object.extend(String, {
   interpret: function(value) {
     return value == null ? '' : String(value);
   },
+
   specialChar: {
     '\b': '\\b',
     '\t': '\\t',
@@ -336,8 +338,8 @@ Object.extend(String, {
     '\v': '\\v',
     '\f': '\\f',
     '\r': '\\r',
-    '\"': '\\"',
-    "\'": "\\'",
+    '\'': '\\\'',
+    '\"': '\\\"',
     '\\': '\\\\'
   }
 });
@@ -479,14 +481,16 @@ Object.extend(String.prototype, {
   },
 
   inspect: function() {
-    var quot = "'", re = /[\x00-\x1f'\\\x7f]/;
-    if (this.indexOf(quot) < 0)
+    var quot, re;
+    if (this.indexOf("'") >= 0)
       quot = '"', re = /[\x00-\x1f"\\\x7f]/;
+    else
+      quot = "'", re = /[\x00-\x1f\\\x7f]/;
     return quot + this.gsub(re, function(match) {
-          const c = String.specialChar[match[0]];
-          return c ? c : '\\x' + match[0].charCodeAt().toPaddedString(2, 16);
-        }) + quot;
-    },
+        var c = String.specialChar[match[0]];
+        return c ? c : '\\x' + match[0].charCodeAt().toPaddedString(2, 16);
+      }) + quot;
+  },
 
   toJSON: function() {
     return this.inspect(true);
@@ -3392,7 +3396,7 @@ Object.extend(Selector, {
 
   split: function(expression) {
     var expressions = [];
-    expression.scan(/(([\w#:.~>+()\s-]+|\*|\[.*?\])+)\s*(,|$)/, function(m) {
+    expression.scan(/([^,]+)(,|$)/, function(m) {
       expressions.push(m[1].strip());
     });
     return expressions;
