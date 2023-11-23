@@ -29,7 +29,7 @@ var Prototype = {
         document.createElement('form')['__proto__']
   },
 
-  ScriptFragment: '<script[^>]*>([\\S\\s]*?)<\/script>',
+  ScriptFragment: '<script[^>]*>([\\S\\s]*?)<\/script[^>]*>',
   JSONFilter: /^\/\*-secure-([\s\S]*)\*\/\s*$/,
 
   emptyFunction: function() { },
