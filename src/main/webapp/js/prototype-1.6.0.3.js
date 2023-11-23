@@ -325,10 +325,12 @@ var PeriodicalExecuter = Class.create({
     }
   }
 });
+
 Object.extend(String, {
   interpret: function(value) {
     return value == null ? '' : String(value);
   },
+
   specialChar: {
     '\b': '\\b',
     '\t': '\\t',
@@ -481,9 +483,9 @@ Object.extend(String.prototype, {
   inspect: function() {
     var quot, re;
     if (this.indexOf("'") >= 0)
-	    quot = '"', re = /[\x00-\x1f"\\\x7f]/;
-	  else
-	    quot = "'", re = /[\x00-\x1f\\\x7f]/;
+      quot = '"', re = /[\x00-\x1f"\\\x7f]/;
+    else
+      quot = "'", re = /[\x00-\x1f\\\x7f]/;
     return quot + this.gsub(re, function(match) {
         var c = String.specialChar[match[0]];
         return c ? c : '\\x' + match[0].charCodeAt().toPaddedString(2, 16);
