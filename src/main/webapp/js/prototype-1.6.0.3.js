@@ -286,7 +286,7 @@ var Try = {
 RegExp.prototype.match = RegExp.prototype.test;
 
 RegExp.escape = function(str) {
-  return String(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+  return String(str).replace(/[!$()*+.\/:=?[\\\]^{|}]/g, '\\$&');
 };
 
 /*--------------------------------------------------------------------------*/
