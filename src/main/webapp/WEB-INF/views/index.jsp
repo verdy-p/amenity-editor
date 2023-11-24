@@ -167,15 +167,15 @@ function updateAmenities(event, url, forceUpdate) {
 }
 function createKeyValueTable(amenity) {
 	var nodeId = amenity.nodeId;
-	var formTag = new Element('form', {id: 'form_' + nodeId, method: 'POST', action: URL.amenity});
-	formTag.insert(new Element('input', {type: 'hidden', name: '_nodeId', value: nodeId}));
-	formTag.insert(new Element('input', {type: 'hidden', name: 'lon', value: amenity.lon}));
-	formTag.insert(new Element('input', {type: 'hidden', name: 'lat', value: amenity.lat}));
+	var formTag = new Element('FORM', {id: 'form_' + nodeId, method: 'POST', action: URL.amenity});
+	formTag.insert(new Element('INPUT', {type: 'hidden', name: '_nodeId', value: nodeId}));
+	formTag.insert(new Element('INPUT', {type: 'hidden', name: 'lon', value: amenity.lon}));
+	formTag.insert(new Element('INPUT', {type: 'hidden', name: 'lat', value: amenity.lat}));
 	if (amenity.newLon && amenity.newLat) {
-		formTag.insert(new Element('input', {type: 'hidden', name: 'newlon', value: amenity.newLon}));
-		formTag.insert(new Element("input", {type: 'hidden', name: 'newlat', value: amenity.newLat}));
+		formTag.insert(new Element('INPUT', {type: 'hidden', name: 'newlon', value: amenity.newLon}));
+		formTag.insert(new Element("INPUT", {type: 'hidden', name: 'newlat', value: amenity.newLat}));
 	}
-	formTag.insert(new Element('input', {type: 'hidden', name: '_method', value: nodeId > 0 ? 'PUT' : 'POST'}));
+	formTag.insert(new Element('INPUT', {type: 'hidden', name: '_method', value: nodeId > 0 ? 'PUT' : 'POST'}));
 	for (var key in amenity.keyValues) {
 		idCounter++;
 		formTag.insert(createTagValue(nodeId, key, amenity.keyValues[key]));
@@ -190,8 +190,8 @@ function updateKeyValueTable(nodeId) {
 	}});
 }
 function createLinkIcon(iconName, url, title) {
-	var elem = new Element('a', {href: url, target: '_blank', class: "ae-url-icon"});
-	elem.insert(new Element('img', {src: contextPath + '/img/icons/' + iconName, title: title}));
+	var elem = new Element('A', {href: url, target: '_blank', class: "ae-url-icon"});
+	elem.insert(new Element('IMG', {src: contextPath + '/img/icons/' + iconName, title: title}));
 	return elem;
 }
 function createTagValue(nodeId, key, value) {
@@ -199,20 +199,20 @@ function createTagValue(nodeId, key, value) {
 	var keyId = 'k_' + idCounter + '_' + nodeId;
 	var valueId = 'v_' + idCounter + '_' + nodeId;
 	var keyIdChoices = keyId + '_choices';
-	var newDiv = new Element('div');
-	newDiv.insert(new Element('input', {id: keyId, type: "text", name: 'key', class: 'inputkey', size: 24, value: key}));
-	newDiv.insert(new Element('div', {id: keyIdChoices, class: 'autocomplete'}));
-	newDiv.insert(new Element('script').update('new Ajax.Autocompleter("' + keyId + '","' + keyId + '_choices","' + URL.acKey + '",{method:'GET',paramName:'input',minChars:1,frequency:.5})'));
-	newDiv.insert(new Element('span').update('&nbsp;'));
-	var valueInput = new Element('input', {id: valueId, type: 'text', name: 'value', class: 'inputvalue', size: 32, value: value});
+	var newDiv = new Element('DIV');
+	newDiv.insert(new Element('INPUT', {id: keyId, type: "text", name: 'key', class: 'inputkey', size: 24, value: key}));
+	newDiv.insert(new Element('DIV', {id: keyIdChoices, class: 'autocomplete'}));
+	newDiv.insert(new Element('SCRIPT').update('new Ajax.Autocompleter("' + keyId + '","' + keyId + '_choices","' + URL.acKey + '",{method:'GET',paramName:'input',minChars:1,frequency:.5})'));
+	newDiv.insert(new Element('SPAN').update('&nbsp;'));
+	var valueInput = new Element('INPUT', {id: valueId, type: 'text', name: 'value', class: 'inputvalue', size: 32, value: value});
 	newDiv.insert(valueInput);
 	if (key == 'url' && value != '')
 		newDiv.insert(createLinkIcon('world.png', value, 'Show URL'));
 	if (key == 'amenity'
 	|| key == 'shop')
 		newDiv.insert(createLinkIcon('anchor.png', 'https://wiki.openstreetmap.org/wiki/Tag:' + key + '=' + value, 'Show Wiki'));
-	newDiv.insert(new Element('div', {id: valueId + '_choices', class: 'autocomplete'}));
-	newDiv.insert(new Element('script').update('new Ajax.Autocompleter("' + valueId + '","' + valueId + '_choices","' + URL.acValue + '",{method:'GET',paramName:'input',minChars:1,frequency:.5,callback:autoCompleteCallBack})'));
+	newDiv.insert(new Element('DIV', {id: valueId + '_choices', class: 'autocomplete'}));
+	newDiv.insert(new Element('SCRIPT').update('new Ajax.Autocompleter("' + valueId + '","' + valueId + '_choices","' + URL.acValue + '",{method:'GET',paramName:'input',minChars:1,frequency:.5,callback:autoCompleteCallBack})'));
 	return newDiv;
 }
 function addTag(nodeId) {
@@ -238,16 +238,16 @@ function addTags(nodeId, tags) {
 	}
 }
 function createAddTagIcon(nodeId, iconUrl, iconTitle, tags) {
-	var newA = new Element('a', {class: 'ae-add-tag-icon', href: '#', onclick: 'addTags("' + nodeId + '",' + Object.toJSON(tags) + ')'});
-	newA.insert(new Element('img', {title: iconTitle, src: iconUrl}));
+	var newA = new Element('A', {class: 'ae-add-tag-icon', href: '#', onclick: 'addTags("' + nodeId + '",' + Object.toJSON(tags) + ')'});
+	newA.insert(new Element('IMG', {title: iconTitle, src: iconUrl}));
 	return newA;
 }
 function createNewAmenityWizard(amenity) {
-	var newDiv = new Element('div');
-	newDiv.insert(new Element('div', {class: 'ae-simple-text'}).update(MSG.templateInfo));
+	var newDiv = new Element('DIV');
+	newDiv.insert(new Element('DIV', {class: 'ae-simple-text'}).update(MSG.templateInfo));
 	var nodeId = amenity.nodeId;
 	for (var key in wizardData)
-		newDiv.insert(new Element('a', {class: 'ae-create-amenity', href: '#', onclick: 'addDefaultTags("' + nodeId + '",' + Object.toJSON(wizardData[key]) + ')'}).update(key));
+		newDiv.insert(new Element('A', {class: 'ae-create-amenity', href: '#', onclick: 'addDefaultTags("' + nodeId + '",' + Object.toJSON(wizardData[key]) + ')'}).update(key));
 	return newDiv;
 }
 function addDefaultTags(nodeId, tags) {
@@ -260,58 +260,58 @@ function addDefaultTags(nodeId, tags) {
 	$('form_' + nodeId).focusFirstElement();
 }
 function createTitleDiv(amenity) {
-	var newDiv = new Element('div', {class: 'ae-nodedetails'});
+	var newDiv = new Element('DIV', {class: 'ae-nodedetails'});
 	if (amenity.nodeId != 0)
-		newDiv.insert(new Element('a', {target: '_blank', href: 'https://www.openstreetmap.org/browse/node/' + amenity.nodeId}).update('Id: ' + amenity.nodeId));
+		newDiv.insert(new Element('A', {target: '_blank', href: 'https://www.openstreetmap.org/browse/node/' + amenity.nodeId}).update('Id: ' + amenity.nodeId));
 	else
 		newDiv.insert('New Node');
 	newDiv.insert(' lon: ' + amenity.lon + ' lat: ' + amenity.lat);
 	return newDiv;
 }
 function createEditBox(newDiv, amenity, feature) {
-	newDiv.update(new Element('div', {class: 'ae-nodename'}).update('Node name: ' + amenity.name));
+	newDiv.update(new Element('DIV', {class: 'ae-nodename'}).update('Node name: ' + amenity.name));
 	newDiv.insert(createTitleDiv(amenity));
 
-	var keyValueTab = new Element('div', {id: 'keyvaluetab_' + amenity.nodeId, class: 'ae-keyvaluetab'}).update(createKeyValueTable(amenity));
+	var keyValueTab = new Element('DIV', {id: 'keyvaluetab_' + amenity.nodeId, class: 'ae-keyvaluetab'}).update(createKeyValueTable(amenity));
 	if (amenity.nodeId == 0) {
 		keyValueTab.hide();
-		editArea.insert(new Element('div', {id: 'naw_' + amenity.nodeId, class: 'ae-keyvaluetab'}).update(createNewAmenityWizard(amenity)));
+		editArea.insert(new Element('DIV', {id: 'naw_' + amenity.nodeId, class: 'ae-keyvaluetab'}).update(createNewAmenityWizard(amenity)));
 	}
-	var editArea = new Element('div', {class: 'ae-editarea'});
+	var editArea = new Element('DIV', {class: 'ae-editarea'});
 	editArea.insert(keyValueTab);
 	newDiv.insert(editArea);
 
-	var buttonDiv = new Element('div', {class: 'ae-buttons-top'});
+	var buttonDiv = new Element('DIV', {class: 'ae-buttons-top'});
 	for (var x = 0; x < keyValueTemplates.length; x++) {
 		var template = keyValueTemplates[x];
 		buttonDiv.insert(createAddTagIcon(amenity.nodeId, contextPath + template.iconUrl, template.iconTitle, template.tags));
 	}
 	newDiv.insert(buttonDiv);
 
-	buttonDiv = new Element('div', {class: 'ae-buttons'});
-	var button = new Element('input', {type: 'button', class: 'ae-edit-button', value: MSG.ebOsmButton, title: MSG.ebOsmButtonTitle, onclick: 'updateKeyValueTable(' + amenity.nodeId + ')'});
+	buttonDiv = new Element('DIV', {class: 'ae-buttons'});
+	var button = new Element('INPUT', {type: 'button', class: 'ae-edit-button', value: MSG.ebOsmButton, title: MSG.ebOsmButtonTitle, onclick: 'updateKeyValueTable(' + amenity.nodeId + ')'});
 	if (amenity.nodeId == 0 || AE.isMoving())
 		button.setAttribute('disabled', 'disabled');
 	buttonDiv.insert(button);
 
-	button = new Element('input', {type: 'button', class: 'ae-edit-button', value: MSG.ebMoveButton, onclick: 'moveAmenity(' + amenity.nodeId + ')'});
+	button = new Element('INPUT', {type: 'button', class: 'ae-edit-button', value: MSG.ebMoveButton, onclick: 'moveAmenity(' + amenity.nodeId + ')'});
 	if (amenity.nodeId == 0 || AE.isMoving())
 		button.setAttribute('disabled', 'disabled');
 	buttonDiv.insert(button);
 
-	var button = new Element('input', {type: 'button', class: 'ae-edit-button', value: MSG.ebDeleteButton, onclick: 'deleteAmenity(' + amenity.nodeId + ')'});
+	var button = new Element('INPUT', {type: 'button', class: 'ae-edit-button', value: MSG.ebDeleteButton, onclick: 'deleteAmenity(' + amenity.nodeId + ')'});
 	if (amenity.nodeId == 0 || AE.isMoving())
 		button.setAttribute('disabled', 'disabled');
 	buttonDiv.insert(button);
 
-	buttonDiv.insert(new Element('input', {type: 'button', class: 'ae-edit-button', value: MSG.ebSaveButton, onclick: 'saveAmenity(' + amenity.nodeId + ')'}));
+	buttonDiv.insert(new Element('INPUT', {type: 'button', class: 'ae-edit-button', value: MSG.ebSaveButton, onclick: 'saveAmenity(' + amenity.nodeId + ')'}));
 
-	button = new Element('input', {type: 'button', class: 'ae-edit-button', value: MSG.ebCloseButton});
+	button = new Element('INPUT', {type: 'button', class: 'ae-edit-button', value: MSG.ebCloseButton});
 	button.observe('click', AE.closePopupHandler.bindAsEventListener(amenity));
 	buttonDiv.insert(button);
 
-	button = new Element('div', {class: 'ae-closeicon'});
-	button.update(new Element('a', {href: '#'}));
+	button = new Element('DIV', {class: 'ae-closeicon'});
+	button.update(new Element('A', {href: '#'}));
 	button.observe('click', AE.closePopupHandler.bindAsEventListener(amenity));
 	buttonDiv.insert(button);
 
@@ -333,8 +333,8 @@ function saveFilterSettings() {
 	if (checkboxesChanged(f.getInputs("checkbox", "show")) || checkboxesChanged(f.getInputs("checkbox", "hide")))
 		updateAmenities(null, null, true);
 	if (f.saveincookie.checked) {
-		var cookie = new Date(); cookie.setTime(date.getTime() + (1000 * 60 * 60 * 24 * 28)); // 28 days
-		cookie = 'expires=' + cookie.toGMTString() + ';settings=' + escape(Object.toJSON(f.serialize(true)));
+		var cookie = new Date(); cookie.setTime(date.getTime() + 1000 * 60 * 60 * 24 * 28); // 28 days
+		cookie = 'settings=' + escape(Object.toJSON(f.serialize(true))) + ';expires=' + cookie.toGMTString();
 		try {
 			document.cookie = cookie
 		} catch (e) {
