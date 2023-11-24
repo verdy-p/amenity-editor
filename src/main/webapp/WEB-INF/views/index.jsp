@@ -155,10 +155,10 @@ function updateAmenities(event, url, forceUpdate) {
 			params.north = extNorth = Math.ceil (north * 100) / 100 + .015;
 			delete params.saveincookie;
 			$('loading').show();
-			new Ajax.Request(url, {method: 'GET', parameters: params, onSuccess: function(transport) {
-				var jsonData = transport.responseJSON;
-				if (jsonData.message)
-					$('loading').hide(), alert(jsonData.message);
+			new Ajax.Request(url, {method: 'GET', parameters: params, onSuccess: function(result) {
+				var data = result.responseJSON;
+				if (data.message)
+					$('loading').hide(), alert(data.message);
 				else
 					AE.refreshAmenities(jsonData);
 			}});
@@ -184,8 +184,8 @@ function createKeyValueTable(amenity) {
 }
 function updateKeyValueTable(nodeId) {
 	var params = new Object(); params.nodeId = nodeId;
-	new Ajax.Request(URL.amenity, {method: 'GET', parameters: params, onSuccess: function(transport) {
-		createEditBox($('amenity_' + transport.responseJSON.nodeId), transport.responseJSON);
+	new Ajax.Request(URL.amenity, {method: 'GET', parameters: params, onSuccess: function(result) {
+		createEditBox($('amenity_' + result.responseJSON.nodeId), result.responseJSON);
 		alert('OK');
 	}});
 }
@@ -405,7 +405,7 @@ function saveAmenity(nodeId) {
 			return;
 		}
 		$('storing').show();
-		new Ajax.Request(URL.amenity, {method: params._nodeId != 0 ? 'PUT' : 'POST', parameters: params, onSuccess: function(transport) {
+		new Ajax.Request(URL.amenity, {method: params._nodeId != 0 ? 'PUT' : 'POST', parameters: params, onSuccess: function(result) {
 			AE.closePopup(nodeId);
 			updateAmenities(null, null, true);
 			$('storing').hide();
@@ -413,7 +413,7 @@ function saveAmenity(nodeId) {
 			document.body.style.cursor = 'auto';
 			AE.removeNewAmenityFeature();
 			AE.movingAmenity = null;
-			alert(transport.responseJSON.message + "\n\n<spring:message code='save.action.info'/>");
+			alert(result.responseJSON.message + "\n\n<spring:message code='save.action.info'/>");
 		}});
 	}
 }
@@ -422,10 +422,10 @@ function deleteAmenity(nodeId) {
 		if (checkAccessRights()) {
 			var params = new Object();
 			params = Object.extend(params, $('form_' + nodeId).serialize(true));
-			new Ajax.Request(URL.amenity, {method: 'DELETE', parameters: params, onSuccess: function(transport) {
+			new Ajax.Request(URL.amenity, {method: 'DELETE', parameters: params, onSuccess: function(result) {
 				AE.closePopup(nodeId);
 				updateAmenities(null, null, true);
-				alert(transport.responseJSON.message);
+				alert(result.responseJSON.message);
 			}});
 		}
 	}
