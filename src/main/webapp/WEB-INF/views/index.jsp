@@ -18,7 +18,7 @@
 	media="screen" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <script src="<wt:ue>/OpenLayers.js</wt:ue>" type="text/javascript"></script>
-<script src="http://openstreetmap.org/openlayers/OpenStreetMap.js"
+<script src="https://openstreetmap.org/openlayers/OpenStreetMap.js"
 	type="text/javascript"></script>
 <script src="<wt:ue>/js/prototype-1.6.1_rc2.js</wt:ue>" type="text/javascript"></script>
 <script src="<wt:ue>/js/scriptaculous.js?load=effects,controls</wt:ue>" type="text/javascript"></script>
