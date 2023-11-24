@@ -126,16 +126,15 @@ function init() {
 	updateAmenities(null);
 }
 function autoCompleteCallBack(inputField, queryString) {
-	var prev = inputField.previousSiblings();
-	var keyValue = '';
-	for (var x = 0; x < prev.length; x++) {
-		var elem = prev[x];
-		if (elem.tagName == 'INPUT') {
-			keyValue = elem.value;
+	var k = '', p = inputField.previousSiblings();
+	for (var i = p.length; --i >= 0; ) {
+		var e = p[i];
+		if (e.tagName == 'INPUT') {
+			k = e.value;
 			break;
 		}
 	}
-	return queryString + '&key=' + keyValue;
+	return queryString + '&key=' + k;
 }
 var extWest = 0, extEast = 0, extNorth = 0, extSouth = 0;
 function updateAmenities(event, url, forceUpdate) {
@@ -146,16 +145,14 @@ function updateAmenities(event, url, forceUpdate) {
 	var lon = x2lon(coords.lon), lat = y2lat(coords.lat);
 	var zoom = map.getZoom();
 	if (zoom > MIN_ZOOM_FOR_EDIT) {
-		var bounds = map.getExtent().toArray();
-		var west = x2lon(bounds[0]), south = y2lat(bounds[1]), east = x2lon(bounds[2]), north = y2lat(bounds[3]);
-		if (forceUpdate
-		|| extWest > west || extEast < east || extSouth > south || extNorth < north
-		|| url != URL.search) {
+		var b = map.getExtent().toArray();
+		var west = x2lon(b[0]), south = y2lat(b[1]), east = x2lon(b[2]), north = y2lat(b[3]);
+		if (forceUpdate || extWest > west || extSouth > south || extEast < east || extNorth < north || url != URL.search) {
 			var params = $('filterform').serialize(true);
-			params.west = west = extWest = Math.floor(west * 100) / 100 - 0.015;
-			params.south = south = extSouth = Math.floor(south * 100) / 100 - 0.015;
-			params.east = east = extEast = Math.ceil(east * 100) / 100 + 0.015;
-			params.north = north = extNorth = Math.ceil(north * 100) / 100 + 0.015;
+			params.west  = extWest  = Math.floor( west * 100) / 100 - .015;
+			params.south = extSouth = Math.floor(south * 100) / 100 - .015;
+			params.east  = extEast  = Math.ceil ( east * 100) / 100 + .015;
+			params.north = extNorth = Math.ceil (north * 100) / 100 + .015;
 			delete params.saveincookie;
 			$('loading').show();
 			new Ajax.Request(url, {method: 'GET', parameters: params, onSuccess: function(transport) {
@@ -186,16 +183,11 @@ function createKeyValueTable(amenity) {
 	return formTag;
 }
 function updateKeyValueTable(nodeId) {
-	var params = new Object();
-	params.nodeId = nodeId;
-	new Ajax.Request(URL.amenity, {
-			method: 'GET',
-			parameters: params,
-			onSuccess: function(transport) {
-				createEditBox($('amenity_' + transport.responseJSON.nodeId), transport.responseJSON);
-				alert('OK');
-			}
-		});
+	var params = new Object(); params.nodeId = nodeId;
+	new Ajax.Request(URL.amenity, {method: 'GET', parameters: params, onSuccess: function(transport) {
+		createEditBox($('amenity_' + transport.responseJSON.nodeId), transport.responseJSON);
+		alert('OK');
+	}});
 }
 function createLinkIcon(iconName, url, title) {
 	var elem = new Element('a', {href: url, target: '_blank', class: "ae-url-icon"});
