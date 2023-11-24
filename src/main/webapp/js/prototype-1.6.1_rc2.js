@@ -364,7 +364,7 @@ Date.prototype.toJSON = function() {
 RegExp.prototype.match = RegExp.prototype.test;
 
 RegExp.escape = function(str) {
-  return String(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+  return String(str).replace(/[!$()*+./:=?[\\\]^\{|}]/g, '\\$&');
 };
 var PeriodicalExecuter = Class.create({
   initialize: function(callback, frequency) {
@@ -679,12 +679,12 @@ if ('<\n>'.escapeHTML() !== '&lt;\n&gt;') {
     return this.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 }
-
 if ('&lt;\n&gt;'.unescapeHTML() !== '<\n>') {
   String.prototype.unescapeHTML = function() {
     return this.stripTags().replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
   }
 }
+
 var Template = Class.create({
   initialize: function(template, pattern) {
     this.template = template.toString();
@@ -3340,7 +3340,7 @@ var Selector = Class.create({
       case 'selectorsAPI':
         if (root !== document) {
           var oldId = root.id, id = $(root).identify();
-          id = id.replace(/[\.:]/g, "\\$0");
+          id = id.replace(/[\.:\\]/g, "\\$&");
           e = "#" + id + " " + e;
         }
 
@@ -3528,7 +3528,7 @@ Object.extend(Selector, {
       return new Template('n = h.attr(n, r, "#{1}", "#{3}", "#{2}", c); c = false;').evaluate(m);
     },
     pseudo: function(m) {
-      if (m[6]) m[6] = m[6].replace(/"/g, '\\"');
+      if (m[6]) m[6] = m[6].replace(/["\\]/g, '\\$&');
       return new Template('n = h.pseudo(n, "#{1}", "#{6}", r, c); c = false;').evaluate(m);
     },
     descendant:   'c = "descendant";',
