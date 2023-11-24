@@ -286,7 +286,7 @@ var Try = {
 RegExp.prototype.match = RegExp.prototype.test;
 
 RegExp.escape = function(str) {
-  return String(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+  return String(str).replace(/[!$()*+.\/:=?[\\\]^\{|}]/g, '\\$&');
 };
 
 /*--------------------------------------------------------------------------*/
@@ -325,16 +325,21 @@ var PeriodicalExecuter = Class.create({
     }
   }
 });
+
 Object.extend(String, {
   interpret: function(value) {
     return value == null ? '' : String(value);
   },
+
   specialChar: {
     '\b': '\\b',
     '\t': '\\t',
     '\n': '\\n',
+    '\v': '\\v',
     '\f': '\\f',
     '\r': '\\r',
+    '\'': '\\\'',
+    '\"': '\\\"',
     '\\': '\\\\'
   }
 });
@@ -475,13 +480,16 @@ Object.extend(String.prototype, {
     return this.gsub(/_/,'-');
   },
 
-  inspect: function(useDoubleQuotes) {
-    var escapedString = this.gsub(/[\x00-\x1f\\]/, function(match) {
-      var character = String.specialChar[match[0]];
-      return character ? character : '\\u00' + match[0].charCodeAt().toPaddedString(2, 16);
-    });
-    if (useDoubleQuotes) return '"' + escapedString.replace(/"/g, '\\"') + '"';
-    return "'" + escapedString.replace(/'/g, '\\\'') + "'";
+  inspect: function() {
+    var quot, re;
+    if (this.indexOf("'") >= 0)
+      quot = '"', re = /[\x00-\x1f"\\\x7f]/;
+    else
+      quot = "'", re = /[\x00-\x1f\\\x7f]/;
+    return quot + this.gsub(re, function(match) {
+        var c = String.specialChar[match[0]];
+        return c ? c : '\\x' + match[0].charCodeAt().toPaddedString(2, 16);
+      }) + quot;
   },
 
   toJSON: function() {
@@ -535,10 +543,10 @@ Object.extend(String.prototype, {
 
 if (Prototype.Browser.WebKit || Prototype.Browser.IE) Object.extend(String.prototype, {
   escapeHTML: function() {
-    return this.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return this.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   },
   unescapeHTML: function() {
-    return this.stripTags().replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+    return this.stripTags().replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
   }
 });
 
@@ -3388,7 +3396,7 @@ Object.extend(Selector, {
 
   split: function(expression) {
     var expressions = [];
-    expression.scan(/(([\w#:.~>+()\s-]+|\*|\[.*?\])+)\s*(,|$)/, function(m) {
+    expression.scan(/([^,]+)(,|$)/, function(m) {
       expressions.push(m[1].strip());
     });
     return expressions;
