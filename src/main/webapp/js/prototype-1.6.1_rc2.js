@@ -364,7 +364,7 @@ Date.prototype.toJSON = function() {
 RegExp.prototype.match = RegExp.prototype.test;
 
 RegExp.escape = function(str) {
-  return String(str).replace(/[!$()*+./:=?[\\\]^\{|}]/g, '\\$&');
+  return String(str).replace(/[!$()*+.\/:=?[\\\]^\{|}]/g, '\\$&');
 };
 var PeriodicalExecuter = Class.create({
   initialize: function(callback, frequency) {
