@@ -42,7 +42,7 @@ var Prototype = {
     })()
   },
 
-  ScriptFragment: '<script[^>]*>([\\S\\s]*?)<\/script>',
+  ScriptFragment: '<script[^\->\w]*>([\\S\\s]*?)<\/script[^\->\w]*>?',
   JSONFilter: /^\/\*-secure-([\s\S]*)\*\/\s*$/,
 
   emptyFunction: function() { },
@@ -364,7 +364,7 @@ Date.prototype.toJSON = function() {
 RegExp.prototype.match = RegExp.prototype.test;
 
 RegExp.escape = function(str) {
-  return String(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+  return String(str).replace(/[!$()*+.\/:=?[\\\]^\{|}]/g, '\\$&');
 };
 var PeriodicalExecuter = Class.create({
   initialize: function(callback, frequency) {
@@ -403,16 +403,21 @@ var PeriodicalExecuter = Class.create({
     }
   }
 });
+
 Object.extend(String, {
   interpret: function(value) {
     return value == null ? '' : String(value);
   },
+
   specialChar: {
     '\b': '\\b',
     '\t': '\\t',
     '\n': '\\n',
+    '\v': '\\v',
     '\f': '\\f',
     '\r': '\\r',
+    '\'': '\\\'',
+    '\"': '\\\"',
     '\\': '\\\\'
   }
 });
@@ -476,7 +481,7 @@ Object.extend(String.prototype, (function() {
   }
 
   function stripTags() {
-    return this.replace(/<\/?[^>]+>/gi, '');
+    return this.replace(/<\/?[^>]+>?/gi, '');
   }
 
   function stripScripts() {
@@ -567,14 +572,17 @@ Object.extend(String.prototype, (function() {
     return this.gsub(/_/,'-');
   }
 
-  function inspect(useDoubleQuotes) {
-    var escapedString = this.gsub(/[\x00-\x1f\\]/, function(match) {
-      var character = String.specialChar[match[0]];
-      return character ? character : '\\u00' + match[0].charCodeAt().toPaddedString(2, 16);
-    });
-    if (useDoubleQuotes) return '"' + escapedString.replace(/"/g, '\\"') + '"';
-    return "'" + escapedString.replace(/'/g, '\\\'') + "'";
-  }
+  function inspect() {
+    var quot, re;
+    if (this.indexOf("'") >= 0)
+      quot = '"', re = /[\x00-\x1f"\\\x7f]/;
+    else
+      quot = "'", re = /[\x00-\x1f\\\x7f]/;
+    return quot + this.gsub(re, function(match) {
+        var c = String.specialChar[match[0]];
+        return c ? c : '\\x' + match[0].charCodeAt().toPaddedString(2, 16);
+      }) + quot;
+  },
 
   function toJSON() {
     return this.inspect(true);
@@ -668,15 +676,15 @@ String.prototype.escapeHTML.div.appendChild(String.prototype.escapeHTML.text);
 
 if ('<\n>'.escapeHTML() !== '&lt;\n&gt;') {
   String.prototype.escapeHTML = function() {
-    return this.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return this.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+}
+if ('&lt;\n&gt;'.unescapeHTML() !== '<\n>') {
+  String.prototype.unescapeHTML = function() {
+    return this.stripTags().replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
   }
 }
 
-if ('&lt;\n&gt;'.unescapeHTML() !== '<\n>') {
-  String.prototype.unescapeHTML = function() {
-    return this.stripTags().replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
-  }
-}
 var Template = Class.create({
   initialize: function(template, pattern) {
     this.template = template.toString();
@@ -3332,7 +3340,7 @@ var Selector = Class.create({
       case 'selectorsAPI':
         if (root !== document) {
           var oldId = root.id, id = $(root).identify();
-          id = id.replace(/[\.:]/g, "\\$0");
+          id = id.replace(/[\.:\\]/g, "\\$&");
           e = "#" + id + " " + e;
         }
 
@@ -3520,7 +3528,7 @@ Object.extend(Selector, {
       return new Template('n = h.attr(n, r, "#{1}", "#{3}", "#{2}", c); c = false;').evaluate(m);
     },
     pseudo: function(m) {
-      if (m[6]) m[6] = m[6].replace(/"/g, '\\"');
+      if (m[6]) m[6] = m[6].replace(/["\\]/g, '\\$&');
       return new Template('n = h.pseudo(n, "#{1}", "#{6}", r, c); c = false;').evaluate(m);
     },
     descendant:   'c = "descendant";',
@@ -3887,7 +3895,7 @@ Object.extend(Selector, {
 
   split: function(expression) {
     var expressions = [];
-    expression.scan(/(([\w#:.~>+()\s-]+|\*|\[.*?\])+)\s*(,|$)/, function(m) {
+    expression.scan(/([^,]+)(,|$)/, function(m) {
       expressions.push(m[1].strip());
     });
     return expressions;
