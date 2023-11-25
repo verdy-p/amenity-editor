@@ -8,277 +8,192 @@
 
 var Prototype = {
   Version: '1.6.1_rc2',
-
   Browser: {
-    IE:     !!(window.attachEvent &&
-      navigator.userAgent.indexOf('Opera') === -1),
-    Opera:  navigator.userAgent.indexOf('Opera') > -1,
+    IE: !!(window.attachEvent && navigator.userAgent.indexOf('Opera') === -1),
+    Opera: navigator.userAgent.indexOf('Opera') > -1,
     WebKit: navigator.userAgent.indexOf('AppleWebKit/') > -1,
-    Gecko:  navigator.userAgent.indexOf('Gecko') > -1 &&
-      navigator.userAgent.indexOf('KHTML') === -1,
+    Gecko: navigator.userAgent.indexOf('Gecko') > -1 && navigator.userAgent.indexOf('KHTML') === -1,
     MobileSafari: !!navigator.userAgent.match(/Apple.*Mobile.*Safari/)
   },
-
   BrowserFeatures: {
     XPath: !!document.evaluate,
     SelectorsAPI: !!document.querySelector,
     ElementExtensions: (function() {
-      if (window.HTMLElement && window.HTMLElement.prototype)
-        return true;
-      if (window.Element && window.Element.prototype)
-        return true;
+      if (window.HTMLElement && window.HTMLElement.prototype) return true;
+      if (window.Element && window.Element.prototype) return true;
     })(),
     SpecificElementExtensions: (function() {
-      if (typeof window.HTMLDivElement !== 'undefined')
-        return true;
-
+      if (typeof window.HTMLDivElement !== 'undefined') return true;
       var div = document.createElement('div');
-      if (div['__proto__'] && div['__proto__'] !==
-       document.createElement('form')['__proto__']) {
-        return true;
-      }
-
+      if (div['__proto__'] && div['__proto__'] !== document.createElement('form')['__proto__']) return true;
       return false;
     })()
   },
-
   ScriptFragment: '<script[^\->\w]*>([\\S\\s]*?)<\/script[^\->\w]*>?',
   JSONFilter: /^\/\*-secure-([\s\S]*)\*\/\s*$/,
-
   emptyFunction: function() { },
   K: function(x) { return x }
 };
-
 if (Prototype.Browser.MobileSafari)
   Prototype.BrowserFeatures.SpecificElementExtensions = false;
 
-
 var Abstract = { };
-
 
 var Try = {
   these: function() {
-    var returnValue;
-
-    for (var i = 0, length = arguments.length; i < length; i++) {
-      var lambda = arguments[i];
+    var r;
+    for (var i = 0, n = arguments.length; i < n; i++) {
+      var f = arguments[i];
       try {
-        returnValue = lambda();
+        r = f();
         break;
       } catch (e) { }
     }
-
-    return returnValue;
+    return r
   }
 };
 
-/* Based on Alex Arnell's inheritance implementation. */
+function $A(iterable) {
+  if (!iterable) return [];
+  if ('toArray' in iterable) return iterable.toArray();
+  var n = iterable.length || 0;
+  var a = new Array(n);
+  while (--n >= 0) a[n] = iterable[n];
+  return a
+}
+Array.from = $A;
 
+/* Based on Alex Arnell's inheritance implementation. */
 var Class = (function() {
   function create() {
-    var parent = null, properties = $A(arguments);
-    if (Object.isFunction(properties[0]))
-      parent = properties.shift();
-
-    function klass() {
-      this.initialize.apply(this, arguments);
+    function c() { this.initialize.apply(this, arguments) }
+    var p = null, a = $A(arguments);
+    if (Object.isFunction(a[0])) p = args.shift();
+    Object.extend(c, Class.Methods);
+    c.superclass = p;
+    c.subclasses = [];
+    if (p) {
+      var s = function() {};
+      s.prototype = p.prototype;
+      c.prototype = new s;
+      p.subclasses.push(c)
     }
-
-    Object.extend(klass, Class.Methods);
-    klass.superclass = parent;
-    klass.subclasses = [];
-
-    if (parent) {
-      var subclass = function() {};
-      subclass.prototype = parent.prototype;
-      klass.prototype = new subclass;
-      parent.subclasses.push(klass);
-    }
-
-    for (var i = 0; i < properties.length; i++)
-      klass.addMethods(properties[i]);
-
-    if (!klass.prototype.initialize)
-      klass.prototype.initialize = Prototype.emptyFunction;
-
-    klass.prototype.constructor = klass;
-    return klass;
+    for (var i = 0, n = a.length; i < n; i++) c.addMethods(a[i]);
+    if (!c.prototype.initialize) c.prototype.initialize = Prototype.emptyFunction;
+    c.prototype.constructor = c;
+    return c
   }
-
   function addMethods(source) {
-    var ancestor   = this.superclass && this.superclass.prototype;
-    var properties = Object.keys(source);
-
+    var a = this.superclass && this.superclass.prototype;
+    var k = Object.keys(source);
     if (!Object.keys({ toString: true }).length) {
-      if (source.toString != Object.prototype.toString)
-        properties.push("toString");
-      if (source.valueOf != Object.prototype.valueOf)
-        properties.push("valueOf");
+      if (source.toString != Object.prototype.toString) k.push('toString');
+      if (source.valueOf != Object.prototype.valueOf) k.push('valueOf')
     }
-
-    for (var i = 0, length = properties.length; i < length; i++) {
-      var property = properties[i], value = source[property];
-      if (ancestor && Object.isFunction(value) &&
-          value.argumentNames().first() == "$super") {
-        var method = value;
-        value = (function(m) {
-          return function() { return ancestor[m].apply(this, arguments); };
-        })(property).wrap(method);
-
-        value.valueOf = method.valueOf.bind(method);
-        value.toString = method.toString.bind(method);
+    for (var i = 0, n = k.length; i < n; i++) {
+      var p = k[i], v = source[p];
+      if (a && Object.isFunction(v) && v.argumentNames().first() == '$super') {
+        var m = v;
+        v = (function(m) { return function() { return a[m].apply(this, arguments) } })(p).wrap(m);
+        v.valueOf = method.valueOf.bind(method);
+        v.toString = method.toString.bind(method)
       }
-      this.prototype[property] = value;
+      this.prototype[p] = v
     }
-
-    return this;
+    return this
   }
-
-  return {
-    create: create,
-    Methods: {
-      addMethods: addMethods
-    }
-  };
+  return { create: create, Methods: { addMethods: addMethods } }
 })();
+
 (function() {
-
-  function getClass(object) {
-    return Object.prototype.toString.call(object)
-     .match(/^\[object\s(.*)\]$/)[1];
+  function extend(d, o) {
+    for (var k in o) d[k] = o[k];
+    return d
   }
-
-  function extend(destination, source) {
-    for (var property in source)
-      destination[property] = source[property];
-    return destination;
+  function clone(o) { return extend({ }, o) }
+  function keys(o) {
+    var a = [];
+    for (var k in o) a.push(k);
+    return a
   }
-
-  function inspect(object) {
+  function values(o) {
+    var a = [];
+    for (var k in o) a.push(o[k]);
+    return a
+  }
+  function isUndefined(o) { return typeof o === 'undefined' }
+  function isFunction(o) { return typeof o === 'function' }
+  function isHash(o) { return o instanceof Hash }
+  function getClass(o) { return Object.prototype.toString.call(o).match(/^\[object\s(.*)\]$/)[1] }
+  function isString(o) { return getClass(o) === 'String' }
+  function isNumber(o) { return getClass(o) === 'Number' }
+  function isArray(o) { return getClass(o) === 'Array' }
+  function isElement(o) { return !!(o && o.nodeType == 1) }
+  function inspect(o) {
     try {
-      if (isUndefined(object)) return 'undefined';
-      if (object === null) return 'null';
-      return object.inspect ? object.inspect() : String(object);
+      if (null === o) return 'null';
+      if (isUndefined(o)) return 'undefined';
+      return o.inspect ? o.inspect() : String(o)
     } catch (e) {
       if (e instanceof RangeError) return '...';
-      throw e;
+      throw e
     }
   }
-
-  function toJSON(object) {
-    var type = typeof object;
-    switch (type) {
-      case 'undefined':
-      case 'function':
-      case 'unknown': return;
-      case 'boolean': return object.toString();
+  function toHTML(o) { return o && o.toHTML ? o.toHTML() : String.interpret(o) }
+  function toQueryString(o) { return $H(o).toQueryString() }
+  function toJSON(o) {
+    switch (typeof o) {
+    case 'undefined': case 'function': case 'unknown': return;
+    case 'boolean': return o.toString()
     }
-
-    if (object === null) return 'null';
-    if (object.toJSON) return object.toJSON();
-    if (isElement(object)) return;
-
-    var results = [];
-    for (var property in object) {
-      var value = toJSON(object[property]);
-      if (!isUndefined(value))
-        results.push(property.toJSON() + ': ' + value);
+    if (o === null) return 'null';
+    if (o.toJSON) return o.toJSON();
+    if (isElement(o)) return;
+    var a = [];
+    for (var k in o) {
+      var v = toJSON(o[k]);
+      if (!isUndefined(v)) a.push(k.toJSON() + ': ' + v)
     }
-
-    return '{' + results.join(', ') + '}';
+    return '{' + a.join(',') + '}'
   }
-
-  function toQueryString(object) {
-    return $H(object).toQueryString();
-  }
-
-  function toHTML(object) {
-    return object && object.toHTML ? object.toHTML() : String.interpret(object);
-  }
-
-  function keys(object) {
-    var results = [];
-    for (var property in object)
-      results.push(property);
-    return results;
-  }
-
-  function values(object) {
-    var results = [];
-    for (var property in object)
-      results.push(object[property]);
-    return results;
-  }
-
-  function clone(object) {
-    return extend({ }, object);
-  }
-
-  function isElement(object) {
-    return !!(object && object.nodeType == 1);
-  }
-
-  function isArray(object) {
-    return getClass(object) === "Array";
-  }
-
-
-  function isHash(object) {
-    return object instanceof Hash;
-  }
-
-  function isFunction(object) {
-    return typeof object === "function";
-  }
-
-  function isString(object) {
-    return getClass(object) === "String";
-  }
-
-  function isNumber(object) {
-    return getClass(object) === "Number";
-  }
-
-  function isUndefined(object) {
-    return typeof object === "undefined";
-  }
-
   extend(Object, {
-    extend:        extend,
-    inspect:       inspect,
-    toJSON:        toJSON,
+    extend: extend,
+    clone: clone,
+    keys: keys,
+    values: values,
+    isUndefined: isUndefined,
+    isFunction: isFunction,
+    isHash: isHash,
+    isString: isString,
+    isNumber: isNumber,
+    isArray: isArray,
+    isElement: isElement,
+    inspect: inspect,
+    toHTML: toHTML,
     toQueryString: toQueryString,
-    toHTML:        toHTML,
-    keys:          keys,
-    values:        values,
-    clone:         clone,
-    isElement:     isElement,
-    isArray:       isArray,
-    isHash:        isHash,
-    isFunction:    isFunction,
-    isString:      isString,
-    isNumber:      isNumber,
-    isUndefined:   isUndefined
+    toJSON: toJSON
   });
 })();
+
 Object.extend(Function.prototype, (function() {
   var slice = Array.prototype.slice;
 
   function update(array, args) {
-    var arrayLength = array.length, length = args.length;
-    while (length--) array[arrayLength + length] = args[length];
-    return array;
+    for (var arrayLength = array.length, length = args.length; --length >= 0; )
+      array[arrayLength + length] = args[length];
+    return array
   }
 
   function merge(array, args) {
-    array = slice.call(array, 0);
-    return update(array, args);
+    return update(array = slice.call(array, 0), args)
   }
 
   function argumentNames() {
-    var names = this.toString().match(/^[\s\(]*function[^(]*\(([^)]*)\)/)[1]
+    var names = this.toString()
+      .match(/^[\s\(]*function[^(]*\(([^)]*)\)/)[1]
       .replace(/\/\/.*?[\r\n]|\/\*(?:.|[\r\n])*?\*\//g, '')
-      .replace(/\s+/g, '').split(',');
+      .replace(/\s+/g, '')
+      .split(',');
     return names.length == 1 && !names[0] ? [] : names;
   }
 
@@ -287,7 +202,7 @@ Object.extend(Function.prototype, (function() {
     var __method = this, args = slice.call(arguments, 1);
     return function() {
       var a = merge(args, arguments);
-      return __method.apply(context, a);
+      return __method.apply(context, a)
     }
   }
 
@@ -295,7 +210,7 @@ Object.extend(Function.prototype, (function() {
     var __method = this, args = slice.call(arguments, 1);
     return function(event) {
       var a = update([event || window.event], args);
-      return __method.apply(context, a);
+      return __method.apply(context, a)
     }
   }
 
@@ -304,49 +219,41 @@ Object.extend(Function.prototype, (function() {
     var __method = this, args = slice.call(arguments, 0);
     return function() {
       var a = merge(args, arguments);
-      return __method.apply(this, a);
+      return __method.apply(this, a)
     }
   }
 
   function delay(timeout) {
     var __method = this, args = slice.call(arguments, 1);
-    timeout = timeout * 1000
-    return window.setTimeout(function() {
-      return __method.apply(__method, args);
-    }, timeout);
+    return window.setTimeout(function() { return __method.apply(__method, args) }, timeout * 1000)
   }
 
   function defer() {
-    var args = update([0.01], arguments);
-    return this.delay.apply(this, args);
+    return this.delay.apply(this, args = update([.01], arguments))
   }
 
   function wrap(wrapper) {
     var __method = this;
     return function() {
-      var a = update([__method.bind(this)], arguments);
-      return wrapper.apply(this, a);
+      return wrapper.apply(this, update([__method.bind(this)], arguments))
     }
   }
 
   function methodize() {
     if (this._methodized) return this._methodized;
     var __method = this;
-    return this._methodized = function() {
-      var a = update([this], arguments);
-      return __method.apply(null, a);
-    };
+    return this._methodized = function() { return __method.apply(null, update([this], arguments)) }
   }
 
   return {
-    argumentNames:       argumentNames,
-    bind:                bind,
+    argumentNames: argumentNames,
+    bind: bind,
     bindAsEventListener: bindAsEventListener,
-    curry:               curry,
-    delay:               delay,
-    defer:               defer,
-    wrap:                wrap,
-    methodize:           methodize
+    curry: curry,
+    delay: delay,
+    defer: defer,
+    wrap: wrap,
+    methodize: methodize
   }
 })());
 
@@ -357,58 +264,40 @@ Date.prototype.toJSON = function() {
     this.getUTCDate().toPaddedString(2) + 'T' +
     this.getUTCHours().toPaddedString(2) + ':' +
     this.getUTCMinutes().toPaddedString(2) + ':' +
-    this.getUTCSeconds().toPaddedString(2) + 'Z"';
+    this.getUTCSeconds().toPaddedString(2) + 'Z"'
 };
 
 
 RegExp.prototype.match = RegExp.prototype.test;
 
-RegExp.escape = function(str) {
-  return String(str).replace(/[!$()*+.\/:=?[\\\]^\{|}]/g, '\\$&');
-};
+RegExp.escape = function(str) { return String(str).replace(/[!$()*+.\/:=?[\\\]^\{|}]/g, '\\$&') };
+
 var PeriodicalExecuter = Class.create({
   initialize: function(callback, frequency) {
     this.callback = callback;
     this.frequency = frequency;
     this.currentlyExecuting = false;
-
-    this.registerCallback();
+    this.registerCallback()
   },
-
-  registerCallback: function() {
-    this.timer = setInterval(this.onTimerEvent.bind(this), this.frequency * 1000);
-  },
-
-  execute: function() {
-    this.callback(this);
-  },
-
+  registerCallback: function() { this.timer = setInterval(this.onTimerEvent.bind(this), this.frequency * 1000) },
+  execute: function() { this.callback(this) },
   stop: function() {
     if (!this.timer) return;
     clearInterval(this.timer);
-    this.timer = null;
+    this.timer = null
   },
-
   onTimerEvent: function() {
     if (!this.currentlyExecuting) {
       try {
         this.currentlyExecuting = true;
-        this.execute();
-      } catch(e) {
-        /* empty catch for clients that don't support try/finally */
-      }
-      finally {
-        this.currentlyExecuting = false;
-      }
+        this.execute()
+      } catch(e) { /* empty catch for clients that don't support try/finally */ } finally { this.currentlyExecuting = false }
     }
   }
 });
 
 Object.extend(String, {
-  interpret: function(value) {
-    return value == null ? '' : String(value);
-  },
-
+  interpret: function(value) { return value == null ? '' : String(value) },
   specialChar: {
     '\b': '\\b',
     '\t': '\\t',
@@ -423,257 +312,170 @@ Object.extend(String, {
 });
 
 Object.extend(String.prototype, (function() {
-
+  function empty() { return this == '' }
+  function blank() { return /^\s*$/.test(this) }
+  function include(pattern) { return this.indexOf(pattern) > -1 }
+  function startsWith(pattern) { return this.indexOf(pattern) === 0 }
+  function endsWith(pattern) {
+    var d = this.length - pattern.length;
+    return d >= 0 && this.lastIndexOf(pattern) === d;
+  }
+  function toArray() { return this.split('') }
+  function succ() { return this.slice(0, this.length - 1) + String.fromCharCode(this.charCodeAt(this.length - 1) + 1) }
+  function times(count) { return count < 1 ? '' : new Array(count + 1).join(this) }
   function prepareReplacement(replacement) {
     if (Object.isFunction(replacement)) return replacement;
     var template = new Template(replacement);
-    return function(match) { return template.evaluate(match) };
+    return function(match) { return template.evaluate(match) }
   }
-
   function gsub(pattern, replacement) {
     var result = '', source = this, match;
     replacement = prepareReplacement(replacement);
-
-    if (Object.isString(pattern))
-      pattern = RegExp.escape(pattern);
-
+    if (Object.isString(pattern)) pattern = RegExp.escape(pattern);
     if (!(pattern.length || pattern.source)) {
       replacement = replacement('');
-      return replacement + source.split('').join(replacement) + replacement;
+      return replacement + source.split('').join(replacement) + replacement
     }
-
     while (source.length > 0) {
       if (match = source.match(pattern)) {
-        result += source.slice(0, match.index);
-        result += String.interpret(replacement(match));
-        source  = source.slice(match.index + match[0].length);
+        result += source.slice(0, match.index) + String.interpret(replacement(match));
+        source = source.slice(match.index + match[0].length)
       } else {
-        result += source, source = '';
+        result += source;
+        source = ''
       }
     }
-    return result;
+    return result
   }
-
   function sub(pattern, replacement, count) {
     replacement = prepareReplacement(replacement);
     count = Object.isUndefined(count) ? 1 : count;
-
     return this.gsub(pattern, function(match) {
-      if (--count < 0) return match[0];
-      return replacement(match);
-    });
+      if (--count < 0)
+        return match[0];
+      return replacement(match)
+    })
   }
-
   function scan(pattern, iterator) {
     this.gsub(pattern, iterator);
-    return String(this);
+    return String(this)
   }
-
+  function inspect() {
+    var quot, re;
+    if (this.indexOf("'") >= 0) quot = '"', re = /[\x00-\x1f"\\\x7f]/;
+    else quot = "'", re = /[\x00-\x1f\\\x7f]/;
+    return quot + this.gsub(re, function(match) {
+        var c = String.specialChar[match[0]];
+        return c ? c : '\\x' + match[0].charCodeAt().toPaddedString(2, 16);
+      }) + quot;
+  }
   function truncate(length, truncation) {
     length = length || 30;
     truncation = Object.isUndefined(truncation) ? '...' : truncation;
-    return this.length > length ?
-      this.slice(0, length - truncation.length) + truncation : String(this);
+    return this.length > length
+      ? this.slice(0, length - truncation.length) + truncation
+      : String(this)
   }
-
-  function strip() {
-    return this.replace(/^\s+/, '').replace(/\s+$/, '');
-  }
-
-  function stripTags() {
-    return this.replace(/<\/?[^>]+>?/gi, '');
-  }
-
-  function stripScripts() {
-    return this.replace(new RegExp(Prototype.ScriptFragment, 'img'), '');
-  }
-
+  function strip() { return this.replace(/^\s+/, '').replace(/\s+$/, '') }
+  function stripTags() { return this.replace(/<\/?[^>]+>?/gi, '') }
+  function stripScripts() { return this.replace(new RegExp(Prototype.ScriptFragment, 'img'), '') }
   function extractScripts() {
-    var matchAll = new RegExp(Prototype.ScriptFragment, 'img');
     var matchOne = new RegExp(Prototype.ScriptFragment, 'im');
-    return (this.match(matchAll) || []).map(function(scriptTag) {
-      return (scriptTag.match(matchOne) || ['', ''])[1];
-    });
+    return (this.match(new RegExp(Prototype.ScriptFragment, 'img')) || []).map(
+      function(scriptTag) { return (scriptTag.match(matchOne) || ['', ''])[1] })
   }
-
-  function evalScripts() {
-    return this.extractScripts().map(function(script) { return eval(script) });
-  }
-
+  function evalScripts() { return this.extractScripts().map(function(script) { return eval(script) }) }
   function escapeHTML() {
     escapeHTML.text.data = this;
-    return escapeHTML.div.innerHTML;
+    return escapeHTML.div.innerHTML
   }
-
   function unescapeHTML() {
-    var div = document.createElement('div');
+    var div = document.createElement('DIV');
     div.innerHTML = this.stripTags();
-    return div.childNodes[0] ? (div.childNodes.length > 1 ?
-      $A(div.childNodes).inject('', function(memo, node) { return memo+node.nodeValue }) :
-      div.childNodes[0].nodeValue) : '';
+    return div.childNodes[0]
+      ? (div.childNodes.length > 1
+        ? $A(div.childNodes).inject('', function(memo, node) { return memo+node.nodeValue })
+        : div.childNodes[0].nodeValue)
+      : ''
   }
-
   function toQueryParams(separator) {
     var match = this.strip().match(/([^?#]*)(#.*)?$/);
     if (!match) return { };
-
     return match[1].split(separator || '&').inject({ }, function(hash, pair) {
       if ((pair = pair.split('='))[0]) {
         var key = decodeURIComponent(pair.shift());
         var value = pair.length > 1 ? pair.join('=') : pair[0];
         if (value != undefined) value = decodeURIComponent(value);
-
         if (key in hash) {
           if (!Object.isArray(hash[key])) hash[key] = [hash[key]];
           hash[key].push(value);
-        }
-        else hash[key] = value;
+        } else hash[key] = value;
       }
-      return hash;
+      return hash
     });
   }
-
-  function toArray() {
-    return this.split('');
-  }
-
-  function succ() {
-    return this.slice(0, this.length - 1) +
-      String.fromCharCode(this.charCodeAt(this.length - 1) + 1);
-  }
-
-  function times(count) {
-    return count < 1 ? '' : new Array(count + 1).join(this);
-  }
-
+  function dasherize() { return this.gsub(/_/,'-') }
+  function capitalize() { return this.charAt(0).toUpperCase() + this.substring(1).toLowerCase() }
+  function underscore() { return this.gsub(/::/, '/').gsub(/([A-Z]+)([A-Z][a-z])/,'#{1}_#{2}').gsub(/([a-z\d])([A-Z])/,'#{1}_#{2}').gsub(/-/,'_').toLowerCase() }
   function camelize() {
     var parts = this.split('-'), len = parts.length;
     if (len == 1) return parts[0];
-
-    var camelized = this.charAt(0) == '-'
-      ? parts[0].charAt(0).toUpperCase() + parts[0].substring(1)
-      : parts[0];
-
-    for (var i = 1; i < len; i++)
-      camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
-
-    return camelized;
+    var camelized = this.charAt(0) == '-' ? parts[0].charAt(0).toUpperCase() + parts[0].substring(1) : parts[0];
+    for (var i = 1; i < len; i++) camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
+    return camelized
   }
-
-  function capitalize() {
-    return this.charAt(0).toUpperCase() + this.substring(1).toLowerCase();
-  }
-
-  function underscore() {
-    return this.gsub(/::/, '/').gsub(/([A-Z]+)([A-Z][a-z])/,'#{1}_#{2}').gsub(/([a-z\d])([A-Z])/,'#{1}_#{2}').gsub(/-/,'_').toLowerCase();
-  }
-
-  function dasherize() {
-    return this.gsub(/_/,'-');
-  }
-
-  function inspect() {
-    var quot, re;
-    if (this.indexOf("'") >= 0)
-      quot = '"', re = /[\x00-\x1f"\\\x7f]/;
-    else
-      quot = "'", re = /[\x00-\x1f\\\x7f]/;
-    return quot + this.gsub(re, function(match) {
-        var c = String.specialChar[match[0]];
-        return c ? c : '\\x' + match[0].charCodeAt().toPaddedString(2, 16);
-      }) + quot;
-  },
-
-  function toJSON() {
-    return this.inspect(true);
-  }
-
-  function unfilterJSON(filter) {
-    return this.sub(filter || Prototype.JSONFilter, '#{1}');
-  }
-
+  function toJSON() { return this.inspect(true) }
+  function unfilterJSON(filter) { return this.sub(filter || Prototype.JSONFilter, '#{1}') }
   function isJSON() {
-    var str = this;
-    if (str.blank()) return false;
-    str = this.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, '');
-    return (/^[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]*$/).test(str);
+    if (this.blank()) return false;
+    return (/^[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]*$/).test(this.replace(/\\./g, '@').replace(/"[^"\\\n\r]*"/g, ''));
   }
-
   function evalJSON(sanitize) {
     var json = this.unfilterJSON();
     try {
-      if (!sanitize || json.isJSON()) return eval('(' + json + ')');
+      if (!sanitize || json.isJSON()) return eval('(' + json + ')')
     } catch (e) { }
-    throw new SyntaxError('Badly formed JSON string: ' + this.inspect());
+    throw new SyntaxError('Badly formed JSON string: ' + this.inspect())
   }
-
-  function include(pattern) {
-    return this.indexOf(pattern) > -1;
-  }
-
-  function startsWith(pattern) {
-    return this.indexOf(pattern) === 0;
-  }
-
-  function endsWith(pattern) {
-    var d = this.length - pattern.length;
-    return d >= 0 && this.lastIndexOf(pattern) === d;
-  }
-
-  function empty() {
-    return this == '';
-  }
-
-  function blank() {
-    return /^\s*$/.test(this);
-  }
-
-  function interpolate(object, pattern) {
-    return new Template(this, pattern).evaluate(object);
-  }
-
+  function interpolate(object, pattern) { return new Template(this, pattern).evaluate(object) }
   return {
-    gsub:           gsub,
-    sub:            sub,
-    scan:           scan,
-    truncate:       truncate,
-    strip:          strip,
-    stripTags:      stripTags,
-    stripScripts:   stripScripts,
+    empty: empty,
+    blank: blank,
+    include: include,
+    startsWith: startsWith,
+    endsWith: endsWith,
+    toArray: toArray,
+    succ: succ,
+    times: times,
+    gsub: gsub,
+    sub: sub,
+    scan: scan,
+    inspect: inspect,
+    truncate: truncate,
+    strip: strip,
+    stripTags: stripTags,
+    stripScripts: stripScripts,
     extractScripts: extractScripts,
-    evalScripts:    evalScripts,
-    escapeHTML:     escapeHTML,
-    unescapeHTML:   unescapeHTML,
-    toQueryParams:  toQueryParams,
-    parseQuery:     toQueryParams,
-    toArray:        toArray,
-    succ:           succ,
-    times:          times,
-    camelize:       camelize,
-    capitalize:     capitalize,
-    underscore:     underscore,
-    dasherize:      dasherize,
-    inspect:        inspect,
-    toJSON:         toJSON,
-    unfilterJSON:   unfilterJSON,
-    isJSON:         isJSON,
-    evalJSON:       evalJSON,
-    include:        include,
-    startsWith:     startsWith,
-    endsWith:       endsWith,
-    empty:          empty,
-    blank:          blank,
-    interpolate:    interpolate
+    evalScripts: evalScripts,
+    escapeHTML: escapeHTML,
+    unescapeHTML: unescapeHTML,
+    toQueryParams: toQueryParams, parseQuery: toQueryParams,
+    dasherize: dasherize,
+    capitalize: capitalize,
+    underscore: underscore,
+    camelize: camelize,
+    toJSON: toJSON,
+    unfilterJSON: unfilterJSON,
+    isJSON: isJSON,
+    evalJSON: evalJSON,
+    interpolate: interpolate
   };
 })());
-
 Object.extend(String.prototype.escapeHTML, {
-  div:  document.createElement('div'),
+  div: document.createElement('DIV'),
   text: document.createTextNode('')
 });
-
 String.prototype.escapeHTML.div.appendChild(String.prototype.escapeHTML.text);
-
 if ('<\n>'.escapeHTML() !== '&lt;\n&gt;') {
   String.prototype.escapeHTML = function() {
     return this.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -688,261 +490,166 @@ if ('&lt;\n&gt;'.unescapeHTML() !== '<\n>') {
 var Template = Class.create({
   initialize: function(template, pattern) {
     this.template = template.toString();
-    this.pattern = pattern || Template.Pattern;
+    this.pattern = pattern || Template.Pattern
   },
-
   evaluate: function(object) {
-    if (Object.isFunction(object.toTemplateReplacements))
-      object = object.toTemplateReplacements();
-
+    if (Object.isFunction(object.toTemplateReplacements)) object = object.toTemplateReplacements();
     return this.template.gsub(this.pattern, function(match) {
-      if (object == null) return '';
-
+      if (null == object) return '';
       var before = match[1] || '';
-      if (before == '\\') return match[2];
-
-      var ctx = object, expr = match[3];
-      var pattern = /^([^.[]+|\[((?:.*?[^\\])?)\])(\.|\[|$)/;
-      match = pattern.exec(expr);
-      if (match == null) return before;
-
-      while (match != null) {
+      if ('\\' == before) return match[2];
+      var ctx = object, expr = match[3], pattern = /^([^.[]+|\[((?:.*?[^\\])?)\])(\.|\[|$)/;
+      if (null == (match = pattern.exec(expr))) return before;
+      while (null != match) {
         var comp = match[1].startsWith('[') ? match[2].gsub('\\\\]', ']') : match[1];
-        ctx = ctx[comp];
-        if (null == ctx || '' == match[3]) break;
-        expr = expr.substring('[' == match[3] ? match[1].length : match[0].length);
-        match = pattern.exec(expr);
+        if (null == (ctx = ctx[comp]) || '' == match[3]) break;
+        match = pattern.exec(expr = expr.substring('[' == match[3] ? match[1].length : match[0].length));
       }
-
       return before + String.interpret(ctx);
     });
   }
 });
 Template.Pattern = /(^|.|\r|\n)(#\{(.*?)\})/;
 
-var $break = { };
-
 var Enumerable = (function() {
-  function each(iterator, context) {
-    var index = 0;
-    try {
-      this._each(function(value) {
-        iterator.call(context, value, index++);
-      });
-    } catch (e) {
-      if (e != $break) throw e;
-    }
-    return this;
-  }
-
-  function eachSlice(number, iterator, context) {
-    var index = -number, slices = [], array = this.toArray();
-    if (number < 1) return array;
-    while ((index += number) < array.length)
-      slices.push(array.slice(index, index+number));
-    return slices.collect(iterator, context);
-  }
-
-  function all(iterator, context) {
-    iterator = iterator || Prototype.K;
-    var result = true;
-    this.each(function(value, index) {
-      result = result && !!iterator.call(context, value, index);
-      if (!result) throw $break;
-    });
-    return result;
-  }
-
-  function any(iterator, context) {
-    iterator = iterator || Prototype.K;
-    var result = false;
-    this.each(function(value, index) {
-      if (result = !!iterator.call(context, value, index))
-        throw $break;
-    });
-    return result;
-  }
-
+  var $break = { };
   function collect(iterator, context) {
-    iterator = iterator || Prototype.K;
-    var results = [];
-    this.each(function(value, index) {
-      results.push(iterator.call(context, value, index));
-    });
-    return results;
+    if (!iterator) iterator = Prototype.K;
+    var r = [];
+    try {
+      this.each(function(v, k) { r.push(iterator.call(context, v, k)) });
+    } catch (e) { if ($break != e) throw e }
+    return r
   }
-
-  function detect(iterator, context) {
-    var result;
-    this.each(function(value, index) {
-      if (iterator.call(context, value, index)) {
-        result = value;
-        throw $break;
-      }
-    });
-    return result;
+  function each(iterator, context) {
+    if (!iterator) iterator = Prototype.K;
+    var k = 0;
+    try {
+      this._each(function(v) { iterator.call(context, v, k++) })
+    } catch (e) { if ($break != e) throw e }
+    return this
   }
-
-  function findAll(iterator, context) {
-    var results = [];
-    this.each(function(value, index) {
-      if (iterator.call(context, value, index))
-        results.push(value);
-    });
-    return results;
+  function eachSlice(number, iterator, context) {
+    var k = -number, a = this.toArray();
+    if (k < 1) return a;
+    var s = [];
+    while ((k += number) < a.length) s.push(a.slice(index, k + number));
+    return s.collect(iterator, context)
   }
-
-  function grep(filter, iterator, context) {
-    iterator = iterator || Prototype.K;
-    var results = [];
-
-    if (Object.isString(filter))
-      filter = new RegExp(RegExp.escape(filter));
-
-    this.each(function(value, index) {
-      if (filter.match(value))
-        results.push(iterator.call(context, value, index));
-    });
-    return results;
-  }
-
-  function include(object) {
-    if (Object.isFunction(this.indexOf))
-      if (this.indexOf(object) != -1) return true;
-
-    var found = false;
-    this.each(function(value) {
-      if (value == object) {
-        found = true;
-        throw $break;
-      }
-    });
-    return found;
-  }
-
-  function inGroupsOf(number, fillWith) {
-    fillWith = Object.isUndefined(fillWith) ? null : fillWith;
-    return this.eachSlice(number, function(slice) {
-      while(slice.length < number) slice.push(fillWith);
-      return slice;
-    });
-  }
-
+  function toArray() { return this.map() }
   function inject(memo, iterator, context) {
-    this.each(function(value, index) {
-      memo = iterator.call(context, memo, value, index);
-    });
+    this.each(function(v, k) { memo = iterator.call(context, memo, v, k) });
     return memo;
   }
-
+  function all(iterator, context) {
+    if (!iterator) iterator = Prototype.K;
+    var r = true;
+    this.each(function(v, k) { if (!iterator.call(context, v, k)) { r = false; throw $break } });
+    return r
+  }
+  function any(iterator, context) {
+    if (!iterator) iterator = Prototype.K;
+    var r = false;
+    this.each(function(v, k) { if (!!iterator.call(context, v, k)) { r = true; throw $break } });
+    return r
+  }
+  function detect(iterator, context) {
+    if (!iterator) iterator = Prototype.K;
+    var r;
+    this.each(function(v, k) { if (iterator.call(context, v, k)) { r = v; throw $break } });
+    return r
+  }
+  function include(object) {
+    if (Object.isFunction(this.indexOf) && this.indexOf(object) != -1) return true;
+    var r = false;
+    this.each(function(v) { if (v == object) { r = true; throw $break } });
+    return r
+  }
+  function findAll(iterator, context) {
+    if (!iterator) iterator = Prototype.K;
+    var r = [];
+    this.each(function(v, k) { if (iterator.call(context, v, k)) r.push(v) });
+    return r
+  }
+  function grep(filter, iterator, context) {
+    if (Object.isString(filter)) filter = new RegExp(RegExp.escape(filter));
+    if (!iterator) iterator = Prototype.K;
+    var r = [];
+    this.each(function(v, k) { if (filter.match(v)) r.push(iterator.call(context, v, k)) });
+    return r
+  }
+  function inGroupsOf(number, fillWith) {
+    if (Object.isUndefined(fillWith)) fillWith = null;
+    return this.eachSlice(number, function(s) {
+      while (s.length < number) s.push(fillWith);
+      return s;
+    });
+  }
   function invoke(method) {
-    var args = $A(arguments).slice(1);
-    return this.map(function(value) {
-      return value[method].apply(value, args);
-    });
+    var a = $A(arguments).slice(1);
+    return this.map(function(v) { return v[method].apply(v, a) })
   }
-
   function max(iterator, context) {
-    iterator = iterator || Prototype.K;
-    var result;
-    this.each(function(value, index) {
-      value = iterator.call(context, value, index);
-      if (result == null || value >= result)
-        result = value;
+    if (!iterator) iterator = Prototype.K;
+    var r;
+    this.each(function(v, k) {
+      value = iterator.call(context, v, k);
+      if (null == r || r < v) r = v
     });
-    return result;
+    return r
   }
-
   function min(iterator, context) {
-    iterator = iterator || Prototype.K;
-    var result;
-    this.each(function(value, index) {
-      value = iterator.call(context, value, index);
-      if (result == null || value < result)
-        result = value;
+    if (!iterator) iterator = Prototype.K;
+    var r;
+    this.each(function(v, k) {
+      v = iterator.call(context, v, k);
+      if (null == r || v < r) r = v
     });
-    return result;
+    return r
   }
-
   function partition(iterator, context) {
-    iterator = iterator || Prototype.K;
-    var trues = [], falses = [];
-    this.each(function(value, index) {
-      (iterator.call(context, value, index) ?
-        trues : falses).push(value);
-    });
-    return [trues, falses];
+    if (!iterator) iterator = Prototype.K;
+    var p = [], q = [];
+    this.each(function(v, k) { (iterator.call(context, v, k) ? p : q).push(v) });
+    return [p, q];
   }
-
   function pluck(property) {
-    var results = [];
-    this.each(function(value) {
-      results.push(value[property]);
-    });
-    return results;
+    var a = [];
+    this.each(function(v) { a.push(v[property]) });
+    return a;
   }
-
-  function reject(iterator, context) {
-    var results = [];
-    this.each(function(value, index) {
-      if (!iterator.call(context, value, index))
-        results.push(value);
-    });
-    return results;
-  }
-
   function sortBy(iterator, context) {
-    return this.map(function(value, index) {
-      return {
-        value: value,
-        criteria: iterator.call(context, value, index)
-      };
-    }).sort(function(left, right) {
-      var a = left.criteria, b = right.criteria;
-      return a < b ? -1 : a > b ? 1 : 0;
-    }).pluck('value');
+    return this.map(function(v, k) {
+      return {v: v, k: iterator.call(context, v, k)}
+    }).sort(function(a, b) {
+      return (a = a.k) < (b = b.k) ? -1 : b < a ? 1 : 0
+    }).pluck('v')
   }
-
-  function toArray() {
-    return this.map();
+  function reject(iterator, context) {
+    var r = [];
+    this.each(function(v, k) {
+      if (!iterator.call(context, v, k)) r.push(v)
+    });
+    return r
   }
-
   function zip() {
     var iterator = Prototype.K, args = $A(arguments);
-    if (Object.isFunction(args.last()))
-      iterator = args.pop();
-
+    if (Object.isFunction(args.last())) iterator = args.pop();
     var collections = [this].concat(args).map($A);
-    return this.map(function(value, index) {
-      return iterator(collections.pluck(index));
-    });
+    return this.map(function(value, index) { return iterator(collections.pluck(index)) })
   }
-
-  function size() {
-    return this.toArray().length;
-  }
-
-  function inspect() {
-    return '#<Enumerable:' + this.toArray().inspect() + '>';
-  }
-
-
-
-
-
-
-
-
-
+  function size() { return this.toArray().length }
+  function inspect() { return '#<Enumerable:' + this.toArray().inspect() + '>' }
   return {
+    collect:    collect,
+    map:        collect,
+    toArray:    toArray,
     each:       each,
     eachSlice:  eachSlice,
     all:        all,
     every:      all,
     any:        any,
     some:       any,
-    collect:    collect,
-    map:        collect,
     detect:     detect,
     findAll:    findAll,
     select:     findAll,
@@ -959,7 +666,6 @@ var Enumerable = (function() {
     pluck:      pluck,
     reject:     reject,
     sortBy:     sortBy,
-    toArray:    toArray,
     entries:    toArray,
     zip:        zip,
     size:       size,
@@ -967,13 +673,6 @@ var Enumerable = (function() {
     find:       detect
   };
 })();
-function $A(iterable) {
-  if (!iterable) return [];
-  if ('toArray' in iterable) return iterable.toArray();
-  var length = iterable.length || 0, results = new Array(length);
-  while (length--) results[length] = iterable[length];
-  return results;
-}
 
 function $w(string) {
   if (!Object.isString(string)) return [];
@@ -981,39 +680,30 @@ function $w(string) {
   return string ? string.split(/\s+/) : [];
 }
 
-Array.from = $A;
-
-
 (function() {
   var arrayProto = Array.prototype,
       slice = arrayProto.slice,
       _each = arrayProto.forEach; // use native browser JS 1.6 implementation if available
-
   function each(iterator) {
     for (var i = 0, length = this.length; i < length; i++)
       iterator(this[i]);
   }
   if (!_each) _each = each;
-
   function clear() {
     this.length = 0;
     return this;
   }
-
   function first() {
     return this[0];
   }
-
   function last() {
     return this[this.length - 1];
   }
-
   function compact() {
     return this.select(function(value) {
       return value != null;
     });
   }
-
   function flatten() {
     return this.inject([], function(array, value) {
       if (Object.isArray(value))
@@ -1022,18 +712,15 @@ Array.from = $A;
       return array;
     });
   }
-
   function without() {
     var values = slice.call(arguments, 0);
     return this.select(function(value) {
       return !values.include(value);
     });
   }
-
   function reverse(inline) {
     return (inline !== false ? this : this.toArray())._reverse();
   }
-
   function uniq(sorted) {
     return this.inject([], function(array, value, index) {
       if (0 == index || (sorted ? array.last() != value : !array.include(value)))
@@ -1041,26 +728,20 @@ Array.from = $A;
       return array;
     });
   }
-
   function intersect(array) {
     return this.uniq().findAll(function(item) {
       return array.detect(function(value) { return item === value });
     });
   }
-
-
   function clone() {
     return slice.call(this, 0);
   }
-
   function size() {
     return this.length;
   }
-
   function inspect() {
     return '[' + this.map(Object.inspect).join(', ') + ']';
   }
-
   function toJSON() {
     var results = [];
     this.each(function(object) {
@@ -1069,7 +750,6 @@ Array.from = $A;
     });
     return '[' + results.join(', ') + ']';
   }
-
   function indexOf(item, i) {
     i || (i = 0);
     var length = this.length;
@@ -1078,13 +758,11 @@ Array.from = $A;
       if (this[i] === item) return i;
     return -1;
   }
-
   function lastIndexOf(item, i) {
     i = isNaN(i) ? this.length : (i < 0 ? this.length + i : i) + 1;
     var n = this.slice(0, i).reverse().indexOf(item);
     return (n < 0) ? n : i - n - 1;
   }
-
   function concat() {
     var array = slice.call(this, 0), item;
     for (var i = 0, length = arguments.length; i < length; i++) {
@@ -1098,12 +776,9 @@ Array.from = $A;
     }
     return array;
   }
-
   Object.extend(arrayProto, Enumerable);
-
   if (!arrayProto._reverse)
     arrayProto._reverse = arrayProto.reverse;
-
   Object.extend(arrayProto, {
     _each:     _each,
     clear:     clear,
@@ -1121,16 +796,14 @@ Array.from = $A;
     inspect:   inspect,
     toJSON:    toJSON
   });
-
   var CONCAT_ARGUMENTS_BUGGY = (function() {
     return [].concat(arguments)[0][0] !== 1;
-  })(1,2)
-
+  })(1, 2)
   if (CONCAT_ARGUMENTS_BUGGY) arrayProto.concat = concat;
-
   if (!arrayProto.indexOf) arrayProto.indexOf = indexOf;
   if (!arrayProto.lastIndexOf) arrayProto.lastIndexOf = lastIndexOf;
 })();
+
 function $H(object) {
   return new Hash(object);
 };
@@ -1139,7 +812,6 @@ var Hash = Class.create(Enumerable, (function() {
   function initialize(object) {
     this._object = Object.isHash(object) ? object.toObject() : Object.clone(object);
   }
-
   function _each(iterator) {
     for (var key in this._object) {
       var value = this._object[key], pair = [key, value];
@@ -1148,57 +820,46 @@ var Hash = Class.create(Enumerable, (function() {
       iterator(pair);
     }
   }
-
   function set(key, value) {
     return this._object[key] = value;
   }
-
   function get(key) {
     if (this._object[key] !== Object.prototype[key])
       return this._object[key];
   }
-
   function unset(key) {
     var value = this._object[key];
     delete this._object[key];
     return value;
   }
-
   function toObject() {
     return Object.clone(this._object);
   }
-
   function keys() {
     return this.pluck('key');
   }
-
   function values() {
     return this.pluck('value');
   }
-
   function index(value) {
     var match = this.detect(function(pair) {
       return pair.value === value;
     });
     return match && match.key;
   }
-
   function merge(object) {
     return this.clone().update(object);
   }
-
   function update(object) {
     return new Hash(object).inject(this, function(result, pair) {
       result.set(pair.key, pair.value);
       return result;
     });
   }
-
   function toQueryPair(key, value) {
     if (Object.isUndefined(value)) return key;
     return key + '=' + encodeURIComponent(String.interpret(value));
   }
-
   function toQueryString() {
     return this.inject([], function(results, pair) {
       var key = encodeURIComponent(pair.key), values = pair.value;
@@ -1210,21 +871,17 @@ var Hash = Class.create(Enumerable, (function() {
       return results;
     }).join('&');
   }
-
   function inspect() {
     return '#<Hash:{' + this.map(function(pair) {
       return pair.map(Object.inspect).join(': ');
     }).join(', ') + '}>';
   }
-
   function toJSON() {
     return Object.toJSON(this.toObject());
   }
-
   function clone() {
     return new Hash(this);
   }
-
   return {
     initialize:             initialize,
     _each:                  _each,
@@ -1244,8 +901,8 @@ var Hash = Class.create(Enumerable, (function() {
     clone:                  clone
   };
 })());
-
 Hash.from = $H;
+
 Object.extend(Number.prototype, (function() {
   function toColorPart() {
     return this.toPaddedString(2, 16);
@@ -4212,693 +3869,372 @@ Form.Element.Serializers = {
 };
 
 /*--------------------------------------------------------------------------*/
-
-
 Abstract.TimedObserver = Class.create(PeriodicalExecuter, {
-  initialize: function($super, element, frequency, callback) {
-    $super(callback, frequency);
-    this.element   = $(element);
-    this.lastValue = this.getValue();
-  },
-
+  initialize: function($super, element, frequency, callback) { $super(callback, frequency), this.element = $(element), this.lastValue = this.getValue() },
   execute: function() {
     var value = this.getValue();
-    if (Object.isString(this.lastValue) && Object.isString(value) ?
-        this.lastValue != value : String(this.lastValue) != String(value)) {
-      this.callback(this.element, value);
-      this.lastValue = value;
-    }
+    if (Object.isString(this.lastValue) && Object.isString(value)
+        ? this.lastValue != value
+        : String(this.lastValue) != String(value))
+      this.callback(this.element, value), this.lastValue = value;
   }
 });
-
 Form.Element.Observer = Class.create(Abstract.TimedObserver, {
-  getValue: function() {
-    return Form.Element.getValue(this.element);
-  }
+  getValue: function() { return Form.Element.getValue(this.element) }
 });
-
 Form.Observer = Class.create(Abstract.TimedObserver, {
-  getValue: function() {
-    return Form.serialize(this.element);
-  }
+  getValue: function() { return Form.serialize(this.element) }
 });
-
 /*--------------------------------------------------------------------------*/
-
 Abstract.EventObserver = Class.create({
   initialize: function(element, callback) {
-    this.element  = $(element);
-    this.callback = callback;
-
-    this.lastValue = this.getValue();
-    if (this.element.tagName.toLowerCase() == 'form')
-      this.registerFormCallbacks();
-    else
-      this.registerCallback(this.element);
+    this.element = $(element), this.callback = callback, this.lastValue = this.getValue();
+    if (this.element.tagName.toLowerCase() == 'form') this.registerFormCallbacks();
+    else this.registerCallback(this.element);
   },
-
   onElementEvent: function() {
-    var value = this.getValue();
-    if (this.lastValue != value) {
-      this.callback(this.element, value);
-      this.lastValue = value;
-    }
+    var value;
+    if ((value = this.getValue()) != this.lastValue) this.callback(this.element, value), this.lastValue = value
   },
-
-  registerFormCallbacks: function() {
-    Form.getElements(this.element).each(this.registerCallback, this);
-  },
-
+  registerFormCallbacks: function() { Form.getElements(this.element).each(this.registerCallback, this) },
   registerCallback: function(element) {
-    if (element.type) {
-      switch (element.type.toLowerCase()) {
-        case 'checkbox':
-        case 'radio':
-          Event.observe(element, 'click', this.onElementEvent.bind(this));
-          break;
-        default:
-          Event.observe(element, 'change', this.onElementEvent.bind(this));
-          break;
-      }
+    if (element.type) switch (element.type.toLowerCase()) {
+      case 'checkbox': case 'radio': Event.observe(element, 'click', this.onElementEvent.bind(this)); break;
+      default: Event.observe(element, 'change', this.onElementEvent.bind(this)); break;
     }
   }
 });
-
 Form.Element.EventObserver = Class.create(Abstract.EventObserver, {
-  getValue: function() {
-    return Form.Element.getValue(this.element);
-  }
+  getValue: function() { return Form.Element.getValue(this.element) }
 });
-
 Form.EventObserver = Class.create(Abstract.EventObserver, {
-  getValue: function() {
-    return Form.serialize(this.element);
-  }
+  getValue: function() { return Form.serialize(this.element) }
 });
 (function() {
-
   var Event = {
     KEY_BACKSPACE: 8,
-    KEY_TAB:       9,
-    KEY_RETURN:   13,
-    KEY_ESC:      27,
-    KEY_LEFT:     37,
-    KEY_UP:       38,
-    KEY_RIGHT:    39,
-    KEY_DOWN:     40,
-    KEY_DELETE:   46,
-    KEY_HOME:     36,
-    KEY_END:      35,
-    KEY_PAGEUP:   33,
+    KEY_TAB: 9,
+    KEY_RETURN: 13,
+    KEY_ESC: 27,
+    KEY_PAGEUP: 33,
     KEY_PAGEDOWN: 34,
-    KEY_INSERT:   45,
-
+    KEY_END: 35,
+    KEY_HOME: 36,
+    KEY_LEFT: 37,
+    KEY_UP: 38,
+    KEY_RIGHT: 39,
+    KEY_DOWN: 40,
+    KEY_INSERT: 45,
+    KEY_DELETE: 46,
     cache: {}
   };
-
   var _isButton;
   if (Prototype.Browser.IE) {
     var buttonMap = { 0: 1, 1: 4, 2: 2 };
-    _isButton = function(event, code) {
-      return event.button === buttonMap[code];
-    };
-  } else if (Prototype.Browser.WebKit) {
-    _isButton = function(event, code) {
-      switch (code) {
-        case 0: return event.which == 1 && !event.metaKey;
-        case 1: return event.which == 1 && event.metaKey;
-        default: return false;
-      }
-    };
-  } else {
-    _isButton = function(event, code) {
-      return event.which ? (event.which === code + 1) : (event.button === code);
-    };
-  }
-
-  function isLeftClick(event)   { return _isButton(event, 0) }
-
-  function isMiddleClick(event) { return _isButton(event, 1) }
-
-  function isRightClick(event)  { return _isButton(event, 2) }
-
-  function element(event) {
-    event = Event.extend(event);
-
-    var node = event.target, type = event.type,
-     currentTarget = event.currentTarget;
-
-    if (currentTarget && currentTarget.tagName) {
-      if (type === 'load' || type === 'error' ||
-        (type === 'click' && currentTarget.tagName.toLowerCase() === 'input'
-          && currentTarget.type === 'radio'))
-            node = currentTarget;
+    _isButton = function(event, code) { return event.button === buttonMap[code] }
+  } else if (Prototype.Browser.WebKit) _isButton = function(event, code) {
+    switch (code) {
+    case 0: return event.which == 1 && !event.metaKey;
+    case 1: return event.which == 1 && event.metaKey;
+    default: return false
     }
-
-    if (node.nodeType == Node.TEXT_NODE)
-      node = node.parentNode;
-
-    return Element.extend(node);
+  } else _isButton = function(event, code) {
+    return event.which ? (event.which === code + 1) : (event.button === code)
   }
-
+  function isLeftClick(event)   { return _isButton(event, 0) }
+  function isMiddleClick(event) { return _isButton(event, 1) }
+  function isRightClick(event)  { return _isButton(event, 2) }
+  function element(event) {
+    var node = (event = Event.extend(event)).target, type = event.type, currentTarget = event.currentTarget;
+    if (currentTarget && currentTarget.tagName && (type === 'load' || type === 'error' || type === 'click' &&
+      currentTarget.tagName.toLowerCase() === 'input' && currentTarget.type === 'radio')) node = currentTarget;
+    if (node.nodeType == Node.TEXT_NODE) node = node.parentNode;
+    return Element.extend(node)
+  }
   function findElement(event, expression) {
-    var element = Event.element(event);
-    if (!expression) return element;
-    var elements = [element].concat(element.ancestors());
-    return Selector.findElement(elements, expression, 0);
+    if (!expression) return Event.element(event);
+    return Selector.findElement([Event.element(event)].concat(element.ancestors()), expression, 0)
   }
-
-  function pointer(event) {
-    return { x: pointerX(event), y: pointerY(event) };
-  }
-
+  function pointer(event) { return { x: pointerX(event), y: pointerY(event) } }
   function pointerX(event) {
-    var docElement = document.documentElement,
-     body = document.body || { scrollLeft: 0 };
-
-    return event.pageX || (event.clientX +
-      (docElement.scrollLeft || body.scrollLeft) -
-      (docElement.clientLeft || 0));
+    var docElement;
+    return event.pageX || event.clientX
+      + ((docElement = document.documentElement).scrollLeft || (document.body || { scrollLeft: 0 }).scrollLeft)
+      - (docElement.clientLeft || 0);
   }
-
   function pointerY(event) {
-    var docElement = document.documentElement,
-     body = document.body || { scrollTop: 0 };
-
-    return  event.pageY || (event.clientY +
-       (docElement.scrollTop || body.scrollTop) -
-       (docElement.clientTop || 0));
+    var docElement;
+    return event.pageY || event.clientY
+      + ((docElement = document.documentElement).scrollTop || (document.body || { scrollTop: 0 }).scrollTop)
+      - (docElement.clientTop || 0);
   }
-
-
-  function stop(event) {
-    Event.extend(event);
-    event.preventDefault();
-    event.stopPropagation();
-
-    event.stopped = true;
-  }
-
+  function stop(event) { Event.extend(event), event.preventDefault(), event.stopPropagation(), event.stopped = true }
   Event.Methods = {
     isLeftClick: isLeftClick,
     isMiddleClick: isMiddleClick,
     isRightClick: isRightClick,
-
     element: element,
     findElement: findElement,
-
     pointer: pointer,
     pointerX: pointerX,
     pointerY: pointerY,
-
     stop: stop
   };
-
-
   var methods = Object.keys(Event.Methods).inject({ }, function(m, name) {
     m[name] = Event.Methods[name].methodize();
-    return m;
+    return m
   });
-
   if (Prototype.Browser.IE) {
     function _relatedTarget(event) {
       var element;
       switch (event.type) {
-        case 'mouseover': element = event.fromElement; break;
-        case 'mouseout':  element = event.toElement;   break;
-        default: return null;
+      case 'mouseover': element = event.fromElement; break;
+      case 'mouseout': element = event.toElement; break;
+      default: return null;
       }
-      return Element.extend(element);
+      return Element.extend(element)
     }
-
     Object.extend(methods, {
       stopPropagation: function() { this.cancelBubble = true },
       preventDefault:  function() { this.returnValue = false },
       inspect: function() { return '[object Event]' }
     });
-
     Event.extend = function(event, element) {
       if (!event) return false;
       if (event._extendedByPrototype) return event;
-
       event._extendedByPrototype = Prototype.emptyFunction;
       var pointer = Event.pointer(event);
-
       Object.extend(event, {
+        pageX: pointer.x, pageY: pointer.y,
         target: event.srcElement || element,
-        relatedTarget: _relatedTarget(event),
-        pageX:  pointer.x,
-        pageY:  pointer.y
+        relatedTarget: _relatedTarget(event)
       });
-
-      return Object.extend(event, methods);
-    };
-  } else {
-    Event.prototype = window.Event.prototype || document.createEvent('HTMLEvents').__proto__;
-    Object.extend(Event.prototype, methods);
-    Event.extend = Prototype.K;
-  }
-
+      return Object.extend(event, methods)
+    }
+  } else Event.prototype = window.Event.prototype || document.createEvent('HTMLEvents').__proto__, Object.extend(Event.prototype, methods), Event.extend = Prototype.K;
+  var CACHE = [];
   function _createResponder(element, eventName, handler) {
-    var registry = Element.retrieve(element, 'prototype_event_registry');
-
-    if (Object.isUndefined(registry)) {
-      CACHE.push(element);
-      registry = Element.retrieve(element, 'prototype_event_registry', $H());
-    }
-
+    var registry;
+    if (Object.isUndefined(registry = Element.retrieve(element, 'prototype_event_registry')))
+      CACHE.push(element), registry = Element.retrieve(element, 'prototype_event_registry', $H());
     var respondersForEvent = registry.get(eventName);
-    if (Object.isUndefined()) {
-      respondersForEvent = [];
-      registry.set(eventName, respondersForEvent);
-    }
-
+    if (Object.isUndefined()) respondersForEvent = [], registry.set(eventName, respondersForEvent)
     if (respondersForEvent.pluck('handler').include(handler)) return false;
-
     var responder;
     if (eventName.include(":")) {
       responder = function(event) {
-        if (Object.isUndefined(event.eventName))
-          return false;
-
-        if (event.eventName !== eventName)
-          return false;
-
-        Event.extend(event, element);
-        handler.call(element, event);
-      };
-    } else {
-      if (!Prototype.Browser.IE &&
-       (eventName === "mouseenter" || eventName === "mouseleave")) {
-        if (eventName === "mouseenter" || eventName === "mouseleave") {
-          responder = function(event) {
-            Event.extend(event, element);
-
-            var parent = event.relatedTarget;
-            while (parent && parent !== element) {
-              try { parent = parent.parentNode; }
-              catch(e) { parent = element; }
-            }
-
-            if (parent === element) return;
-
-            handler.call(element, event);
-          };
-        }
-      } else {
+        if (Object.isUndefined(event.eventName)) return false;
+        if (event.eventName !== eventName) return false;
+        Event.extend(event, element), handler.call(element, event)
+      }
+    } else if (!Prototype.Browser.IE && (eventName === "mouseenter" || eventName === "mouseleave")) {
+      if (eventName === "mouseenter" || eventName === "mouseleave") {
         responder = function(event) {
           Event.extend(event, element);
-          handler.call(element, event);
-        };
+          var parent = event.relatedTarget;
+          while (parent && parent !== element)
+            try { parent = parent.parentNode } catch(e) { parent = element }
+          if (parent === element) return;
+          handler.call(element, event)
+        }
       }
-    }
-
-    responder.handler = handler;
-    respondersForEvent.push(responder);
-    return responder;
+    } else responder = function(event) { Event.extend(event, element), handler.call(element, event) };
+    responder.handler = handler, respondersForEvent.push(responder);
+    return responder
   }
-
   function _destroyCache() {
-    for (var i = 0, length = CACHE.length; i < length; i++) {
+    for (var i = 0, n = CACHE.length; i < n; i++) {
       Event.stopObserving(CACHE[i]);
       CACHE[i] = null;
     }
   }
-
-  var CACHE = [];
-
-  if (Prototype.Browser.IE)
-    window.attachEvent('onunload', _destroyCache);
-
-  if (Prototype.Browser.WebKit)
-    window.addEventListener('unload', Prototype.emptyFunction, false);
-
-
-  var _getDOMEventName = Prototype.K;
-
-  if (!Prototype.Browser.IE) {
-    _getDOMEventName = function(eventName) {
+  if (Prototype.Browser.IE) window.attachEvent('onunload', _destroyCache);
+  if (Prototype.Browser.WebKit) window.addEventListener('unload', Prototype.emptyFunction, false);
+  var _getDOMEventName = Prototype.Browser.IE &&  function(eventName) {
       var translations = { mouseenter: "mouseover", mouseleave: "mouseout" };
       return eventName in translations ? translations[eventName] : eventName;
-    };
-  }
-
+  } || Prototype.K
   function observe(element, eventName, handler) {
-    element = $(element);
-
-    var responder = _createResponder(element, eventName, handler);
-
-    if (!responder) return element;
-
-    if (eventName.include(':')) {
-      if (element.addEventListener)
-        element.addEventListener("dataavailable", responder, false);
-      else {
-        element.attachEvent("ondataavailable", responder);
-        element.attachEvent("onfilterchange", responder);
-      }
-    } else {
-      var actualEventName = _getDOMEventName(eventName);
-
-      if (element.addEventListener)
-        element.addEventListener(actualEventName, responder, false);
-      else
-        element.attachEvent("on" + actualEventName, responder);
-    }
-
-    return element;
+    var responder;
+    if (!(responder = _createResponder(element = $(element), eventName, handler))) return element;
+    if (eventName.include(':'))
+      if (element.addEventListener) element.addEventListener("dataavailable", responder, false);
+      else element.attachEvent("ondataavailable", responder), element.attachEvent("onfilterchange", responder);
+    else if (element.addEventListener) element.addEventListener(_getDOMEventName(eventName), responder, false);
+    else element.attachEvent("on" + _getDOMEventName(eventName), responder)
+    return element
   }
-
   function stopObserving(element, eventName, handler) {
-    element = $(element);
-
-    var registry = Element.retrieve(element, 'prototype_event_registry');
-
-    if (Object.isUndefined(registry)) return element;
-
+    var registry;
+    if (Object.isUndefined(registry = Element.retrieve(element = $(element), 'prototype_event_registry'))) return element;
     if (eventName && !handler) {
-      var responders = registry.get(eventName);
-
-      if (Object.isUndefined(responders)) return element;
-
-      responders.each( function(r) {
-        Element.stopObserving(element, eventName, r.handler);
-      });
+      var responders;
+      if (Object.isUndefined(responders = registry.get(eventName))) return element;
+      responders.each(function(r) { Element.stopObserving(element, eventName, r.handler) });
       return element;
     } else if (!eventName) {
-      registry.each( function(pair) {
+      registry.each(function(pair) {
         var eventName = pair.key, responders = pair.value;
-
-        responders.each( function(r) {
-          Element.stopObserving(element, eventName, r.handler);
-        });
+        responders.each(function(r) { Element.stopObserving(element, eventName, r.handler) });
       });
-      return element;
+      return element
     }
-
-    var responders = registry.get(eventName);
-
-    if (!responders) return;
-
-    var responder = responders.find( function(r) { return r.handler === handler; });
-    if (!responder) return element;
-
-    var actualEventName = _getDOMEventName(eventName);
-
-    if (eventName.include(':')) {
-      if (element.removeEventListener)
-        element.removeEventListener("dataavailable", responder, false);
-      else {
-        element.detachEvent("ondataavailable", responder);
-        element.detachEvent("onfilterchange",  responder);
-      }
-    } else {
-      if (element.removeEventListener)
-        element.removeEventListener(actualEventName, responder, false);
-      else
-        element.detachEvent('on' + actualEventName, responder);
-    }
-
+    var responders;
+    if (!(responders = registry.get(eventName))) return;
+    var responder;
+    if (!(responder = responders.find(function(r) { return r.handler === handler }))) return element;
+    if (eventName.include(':'))
+      if (element.removeEventListener) element.removeEventListener("dataavailable", responder, false);
+      else element.detachEvent("ondataavailable", responder), element.detachEvent("onfilterchange",  responder);
+    else if (element.removeEventListener) element.removeEventListener(_getDOMEventName(eventName), responder, false);
+    else element.detachEvent('on' + _getDOMEventName(eventName), responder);
     registry.set(eventName, responders.without(responder));
-
-    return element;
+    return element
   }
-
   function fire(element, eventName, memo, bubble) {
     element = $(element);
-
-    if (Object.isUndefined(bubble))
-      bubble = true;
-
-    if (element == document && document.createEvent && !element.dispatchEvent)
-      element = document.documentElement;
-
+    if (Object.isUndefined(bubble)) bubble = true;
+    if (element == document && document.createEvent && !element.dispatchEvent) element = document.documentElement;
     var event;
-    if (document.createEvent) {
-      event = document.createEvent('HTMLEvents');
-      event.initEvent('dataavailable', true, true);
-    } else {
-      event = document.createEventObject();
-      event.eventType = bubble ? 'ondataavailable' : 'onfilterchange';
-    }
-
-    event.eventName = eventName;
-    event.memo = memo || { };
-
-    if (document.createEvent)
-      element.dispatchEvent(event);
-    else
-      element.fireEvent(event.eventType, event);
-
-    return Event.extend(event);
+    if (document.createEvent) event = document.createEvent('HTMLEvents'), event.initEvent('dataavailable', true, true);
+    else event = document.createEventObject(), event.eventType = bubble ? 'ondataavailable' : 'onfilterchange';
+    event.eventName = eventName, event.memo = memo || { };
+    if (document.createEvent) element.dispatchEvent(event);
+    else element.fireEvent(event.eventType, event);
+    return Event.extend(event)
   }
-
-
   Object.extend(Event, Event.Methods);
-
   Object.extend(Event, {
-    fire:          fire,
-    observe:       observe,
+    fire: fire,
+    observe: observe,
     stopObserving: stopObserving
   });
-
   Element.addMethods({
-    fire:          fire,
-
-    observe:       observe,
-
+    fire: fire,
+    observe: observe,
     stopObserving: stopObserving
   });
-
   Object.extend(document, {
-    fire:          fire.methodize(),
-
-    observe:       observe.methodize(),
-
+    fire: fire.methodize(),
+    observe: observe.methodize(),
     stopObserving: stopObserving.methodize(),
-
-    loaded:        false
+    loaded: false
   });
-
-  if (window.Event) Object.extend(window.Event, Event);
-  else window.Event = Event;
+  if (window.Event) Object.extend(window.Event, Event); else window.Event = Event
 })();
-
 (function() {
   /* Support for the DOMContentLoaded event is based on work by Dan Webb,
      Matthias Miller, Dean Edwards, John Resig, and Diego Perini. */
-
   var timer;
-
   function fireContentLoadedEvent() {
     if (document.loaded) return;
     if (timer) window.clearTimeout(timer);
     document.loaded = true;
-    document.fire('dom:loaded');
+    document.fire('dom:loaded')
   }
-
   function checkReadyState() {
     if (document.readyState === 'complete') {
       document.stopObserving('readystatechange', checkReadyState);
-      fireContentLoadedEvent();
+      fireContentLoadedEvent()
     }
   }
-
   function pollDoScroll() {
-    try { document.documentElement.doScroll('left'); }
-    catch(e) {
+    try { document.documentElement.doScroll('left') } catch(e) {
       timer = pollDoScroll.defer();
       return;
     }
-    fireContentLoadedEvent();
+    fireContentLoadedEvent()
   }
-
-  if (document.addEventListener) {
-    document.addEventListener('DOMContentLoaded', fireContentLoadedEvent, false);
-  } else {
+  if (document.addEventListener) document.addEventListener('DOMContentLoaded', fireContentLoadedEvent, false); else {
     document.observe('readystatechange', checkReadyState);
-    if (window == top)
-      timer = pollDoScroll.defer();
+    if (window == top) timer = pollDoScroll.defer()
   }
-
-  Event.observe(window, 'load', fireContentLoadedEvent);
+  Event.observe(window, 'load', fireContentLoadedEvent)
 })();
-
 Element.addMethods();
-
 /*------------------------------- DEPRECATED -------------------------------*/
-
 Hash.toQueryString = Object.toQueryString;
-
-var Toggle = { display: Element.toggle };
-
 Element.Methods.childOf = Element.Methods.descendantOf;
-
-var Insertion = {
-  Before: function(element, content) {
-    return Element.insert(element, {before:content});
-  },
-
-  Top: function(element, content) {
-    return Element.insert(element, {top:content});
-  },
-
-  Bottom: function(element, content) {
-    return Element.insert(element, {bottom:content});
-  },
-
-  After: function(element, content) {
-    return Element.insert(element, {after:content});
-  }
-};
-
-var $continue = new Error('"throw $continue" is deprecated, use "return" instead');
-
-var Position = {
+var $continue = new Error('"throw $continue" is deprecated, use "return" instead'), Toggle = {
+  display: Element.toggle
+}, Insertion = {
+  Before: function(element, content) { return Element.insert(element, {before:content}) },
+  Top: function(element, content) { return Element.insert(element, {top:content}) },
+  Bottom: function(element, content) { return Element.insert(element, {bottom:content}) },
+  After: function(element, content) { return Element.insert(element, {after:content}) }
+}, Position = {
   includeScrollOffsets: false,
-
   prepare: function() {
-    this.deltaX =  window.pageXOffset
-                || document.documentElement.scrollLeft
-                || document.body.scrollLeft
-                || 0;
-    this.deltaY =  window.pageYOffset
-                || document.documentElement.scrollTop
-                || document.body.scrollTop
-                || 0;
+    this.deltaX =  window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0,
+    this.deltaY =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0
   },
-
   within: function(element, x, y) {
-    if (this.includeScrollOffsets)
-      return this.withinIncludingScrolloffsets(element, x, y);
-    this.xcomp = x;
-    this.ycomp = y;
-    this.offset = Element.cumulativeOffset(element);
-
-    return (y >= this.offset[1] &&
-            y <  this.offset[1] + element.offsetHeight &&
-            x >= this.offset[0] &&
-            x <  this.offset[0] + element.offsetWidth);
+    if (this.includeScrollOffsets) return this.withinIncludingScrolloffsets(element, x, y);
+    this.xcomp = x, this.ycomp = y, this.offset = Element.cumulativeOffset(element);
+    return (y >= this.offset[1] && y < this.offset[1] + element.offsetHeight &&
+            x >= this.offset[0] && x < this.offset[0] + element.offsetWidth)
   },
-
   withinIncludingScrolloffsets: function(element, x, y) {
     var offsetcache = Element.cumulativeScrollOffset(element);
-
-    this.xcomp = x + offsetcache[0] - this.deltaX;
-    this.ycomp = y + offsetcache[1] - this.deltaY;
-    this.offset = Element.cumulativeOffset(element);
-
-    return (this.ycomp >= this.offset[1] &&
-            this.ycomp <  this.offset[1] + element.offsetHeight &&
-            this.xcomp >= this.offset[0] &&
-            this.xcomp <  this.offset[0] + element.offsetWidth);
+    this.xcomp = x + offsetcache[0] - this.deltaX, this.ycomp = y + offsetcache[1] - this.deltaY, this.offset = Element.cumulativeOffset(element);
+    return (this.ycomp >= this.offset[1] && this.ycomp < this.offset[1] + element.offsetHeight &&
+            this.xcomp >= this.offset[0] && this.xcomp < this.offset[0] + element.offsetWidth)
   },
-
   overlap: function(mode, element) {
     if (!mode) return 0;
-    if (mode == 'vertical')
-      return ((this.offset[1] + element.offsetHeight) - this.ycomp) /
-        element.offsetHeight;
-    if (mode == 'horizontal')
-      return ((this.offset[0] + element.offsetWidth) - this.xcomp) /
-        element.offsetWidth;
+    if (mode == 'vertical') return ((this.offset[1] + element.offsetHeight) - this.ycomp) / element.offsetHeight;
+    if (mode == 'horizontal') return ((this.offset[0] + element.offsetWidth) - this.xcomp) / element.offsetWidth
   },
-
-
   cumulativeOffset: Element.Methods.cumulativeOffset,
-
   positionedOffset: Element.Methods.positionedOffset,
-
   absolutize: function(element) {
     Position.prepare();
-    return Element.absolutize(element);
+    return Element.absolutize(element)
   },
-
   relativize: function(element) {
     Position.prepare();
-    return Element.relativize(element);
+    return Element.relativize(element)
   },
-
   realOffset: Element.Methods.cumulativeScrollOffset,
-
   offsetParent: Element.Methods.getOffsetParent,
-
   page: Element.Methods.viewportOffset,
-
-  clone: function(source, target, options) {
-    options = options || { };
-    return Element.clonePosition(target, source, options);
-  }
+  clone: function(source, target, options) { return Element.clonePosition(target, source, options || { }) }
 };
-
 /*--------------------------------------------------------------------------*/
-
 if (!document.getElementsByClassName) document.getElementsByClassName = function(instanceMethods){
-  function iter(name) {
-    return name.blank() ? null : "[contains(concat(' ', @class, ' '), ' " + name + " ')]";
-  }
-
-  instanceMethods.getElementsByClassName = Prototype.BrowserFeatures.XPath ?
-  function(element, className) {
-    className = className.toString().strip();
-    var cond = /\s/.test(className) ? $w(className).map(iter).join('') : iter(className);
-    return cond ? document._getElementsByXPath('.//*' + cond, element) : [];
-  } : function(element, className) {
-    className = className.toString().strip();
-    var elements = [], classNames = (/\s/.test(className) ? $w(className) : null);
-    if (!classNames && !className) return elements;
-
-    var nodes = $(element).getElementsByTagName('*');
-    className = ' ' + className + ' ';
-
-    for (var i = 0, child, cn; child = nodes[i]; i++) {
-      if (child.className && (cn = ' ' + child.className + ' ') && (cn.include(className) ||
-          (classNames && classNames.all(function(name) {
-            return !name.toString().blank() && cn.include(' ' + name + ' ');
-          }))))
-        elements.push(Element.extend(child));
-    }
-    return elements;
-  };
-
-  return function(className, parentElement) {
-    return $(parentElement || document.body).getElementsByClassName(className);
-  };
+  instanceMethods.getElementsByClassName = Prototype.BrowserFeatures.XPath
+    ? function(element, className) {
+      var c = /\s/.test(className = className.toString().strip()) ? $w(className).map(function(n) {
+        return n.blank() ? null : "[contains(concat(' ',@class,' '),' " + n + " ')]"
+      }).join('') : iter(className);
+      return c ? document._getElementsByXPath('.//*' + c, element) : []
+    } : function(element, className) {
+      var classNames = (/\s/.test(className = className.toString().strip()) ? $w(className) : null), e = [];
+      if (!classNames && !className) return e;
+      className = ' ' + className + ' ';
+      for (var i = 0, c, cn, n = $(element).getElementsByTagName('*'); c = n[i]; i++)
+        if (child.className && ((cn = ' ' + c.className + ' ').include(className) || classNames && classNames.all(function(name) {
+            return !name.toString().blank() && cn.include(' ' + name + ' '); })))
+          e.push(Element.extend(c))
+      return e
+    };
+  return function(className, parentElement) { return $(parentElement || document.body).getElementsByClassName(className) }
 }(Element.Methods);
-
 /*--------------------------------------------------------------------------*/
-
 Element.ClassNames = Class.create();
 Element.ClassNames.prototype = {
-  initialize: function(element) {
-    this.element = $(element);
-  },
-
-  _each: function(iterator) {
-    this.element.className.split(/\s+/).select(function(name) {
-      return name.length > 0;
-    })._each(iterator);
-  },
-
-  set: function(className) {
-    this.element.className = className;
-  },
-
+  initialize: function(element) { this.element = $(element) },
+  _each: function(iterator) { this.element.className.split(/\s+/).select(function(name) { return name.length > 0 })._each(iterator) },
+  set: function(className) { this.element.className = className },
+  toString: function() { return $A(this).join(' ') },
   add: function(classNameToAdd) {
     if (this.include(classNameToAdd)) return;
-    this.set($A(this).concat(classNameToAdd).join(' '));
+    this.set($A(this).concat(classNameToAdd).join(' '))
   },
-
   remove: function(classNameToRemove) {
     if (!this.include(classNameToRemove)) return;
-    this.set($A(this).without(classNameToRemove).join(' '));
-  },
-
-  toString: function() {
-    return $A(this).join(' ');
+    this.set($A(this).without(classNameToRemove).join(' '))
   }
 };
-
 Object.extend(Element.ClassNames.prototype, Enumerable);
-
 /*--------------------------------------------------------------------------*/
