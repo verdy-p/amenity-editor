@@ -20,11 +20,11 @@
 		<db.password>sa</db.password>
 
 		<oauth.signpost-version>2.0.0</oauth.signpost-version>
-		<oauth.callbackUrl>http://localhost:8080/amenity-editor/ae/oauth</oauth.callbackUrl>
+		<oauth.callbackUrl>https://localhost:8080/amenity-editor/ae/oauth</oauth.callbackUrl>
 		<oauth.consumerKey/>
 		<oauth.consumerSecret/>
 
-		<osm.api.base.url>http://api06.dev.openstreetmap.org</osm.api.base.url>
+		<osm.api.base.url>https://api06.dev.openstreetmap.org</osm.api.base.url>
 		<oauth.requestTokenEndpointUrl>${osm.api.base.url}/oauth/request_token</oauth.requestTokenEndpointUrl>
 		<oauth.accessTokenEndpointUrl>${osm.api.base.url}/oauth/access_token</oauth.accessTokenEndpointUrl>
 		<oauth.authorizeWebsiteUrl>${osm.api.base.url}/oauth/authorize</oauth.authorizeWebsiteUrl>
@@ -33,14 +33,14 @@
 		<profile>
 			<id>build-prd</id>
 			<properties>
-				<oauth.callbackUrl>http://ae.osmsurround.org/ae/oauth</oauth.callbackUrl>
+				<oauth.callbackUrl>https://ae.osmsurround.org/ae/oauth</oauth.callbackUrl>
 				<war.file.name>ROOT</war.file.name>
 			</properties>
 		</profile>
 		<profile>
 			<id>build-test</id>
 			<properties>
-				<oauth.callbackUrl>http://ae.osmsurround.org/TEST/ae/oauth</oauth.callbackUrl>
+				<oauth.callbackUrl>https://ae.osmsurround.org/TEST/ae/oauth</oauth.callbackUrl>
 				<war.file.name>TEST</war.file.name>
 			</properties>
 		</profile>
@@ -206,7 +206,7 @@
 		<repository>
 			<id>org.springframework.maven.snapshot</id>
 			<name>Spring Maven Snapshot Repository</name>
-			<url>http://maven.springframework.org/snapshot</url>
+			<url>https://maven.springframework.org/snapshot</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -218,7 +218,7 @@
 		<repository>
 			<id>org.springframework.maven.milestone</id>
 			<name>Spring Maven Milestone Repository</name>
-			<url>http://maven.springframework.org/milestone</url>
+			<url>https://maven.springframework.org/milestone</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
