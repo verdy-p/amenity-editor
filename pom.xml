@@ -204,9 +204,9 @@
 	<repositories>
 		<!-- For testing against latest Spring snapshots -->
 		<repository>
-			<id>org.springframework.maven.snapshot</id>
-			<name>Spring Maven Snapshot Repository</name>
-			<url>https://maven.springframework.org/snapshot</url>
+			<id>repository.spring.snapshot</id>
+			<name>Spring Snapshot Repository</name>
+			<url>https://repo.spring.io/snapshot</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -216,9 +216,9 @@
 		</repository>
 		<!-- For developing against latest Spring milestones -->
 		<repository>
-			<id>org.springframework.maven.milestone</id>
-			<name>Spring Maven Milestone Repository</name>
-			<url>https://maven.springframework.org/milestone</url>
+			<id>repository.spring.milestone</id>
+			<name>Spring Milestone Repository</name>
+			<url>https://repo.spring.io/milestone</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
