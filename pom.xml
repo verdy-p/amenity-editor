@@ -245,7 +245,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.12.1</version>
 				<configuration>
-					<release>17</release>
+					<release>8</release>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -260,7 +260,7 @@
 			<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
 				<artifactId>maven-jaxb2-plugin</artifactId>
-				<version>0.8.0</version>
+				<version>0.15.3</version>
 				<executions>
 					<execution>
 						<id>generate-osm</id>
