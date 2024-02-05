@@ -96,7 +96,7 @@
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social</artifactId>
-			<version>${org.springframework-version}/version>
+			<version>${org.springframework-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Servlet -->
