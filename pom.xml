@@ -11,7 +11,7 @@
 		<java-version>1.6</java-version>
 		<war.file.name>amenity-editor</war.file.name>
 
-		<org.springframework-version>2.0.0.BUILD-SNAPSHOT</org.springframework-version>
+		<org.springframework-version>5.2.21.BUILD-SNAPSHOT</org.springframework-version>
 		<org.slf4j-version>1.7.36</org.slf4j-version>
 
 		<db.driver>org.h2.Driver</db.driver>
