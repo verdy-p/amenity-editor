@@ -1040,7 +1040,7 @@ Ajax.Response = Class.create({
     var o = this.request.options;
     if (!o.evalJSON || (o.evalJSON != 'force' && !(this.getHeader('Content-type') || '').include('application/json')) || this.responseText.blank()) return null;
     try { return this.responseText.evalJSON(o.sanitizeJSON || !this.request.isSameOrigin()) } catch (e) { this.request.dispatchException(e) }
-  }
+  },
   initialize: function(request) {
     var t = this.transport = (this.request = request).transport, s = this.readyState = t.readyState;
     if ((s > 2 && !Prototype.Browser.IE) || s == 4) {
