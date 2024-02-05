@@ -711,7 +711,7 @@ var Enumerable = (function() {
   }
   function indexOf(item, i) {
     var n = this.length;
-    i || i = 0;
+    i || (i = 0);
     if (i < 0) i = n + i;
     for (; i < n; i++) if (this[i] === item) return i;
     return -1;
