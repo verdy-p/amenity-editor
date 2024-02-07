@@ -82,7 +82,7 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>4.2.13</version>
+			<version>5.8.9</version>
 		</dependency>
 
 		<dependency>
