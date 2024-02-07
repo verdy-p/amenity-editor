@@ -1176,7 +1176,7 @@ Element.Methods = {
     return element;
   },
   toggle: function(element) {
-    if (Element.visible(element = $(element))) Element.hide(element) else Element.show(element);
+    if (Element.visible(element = $(element))) Element.hide(element); else Element.show(element);
     return element;
   },
   scrollTo: function(element) {
