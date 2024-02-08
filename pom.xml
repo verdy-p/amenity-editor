@@ -280,7 +280,6 @@
 					<release>8</release>
 					<compilerArgs>
 						<arg>-Xlint:deprecation</arg>
-						<arg>--illegal-access=warn</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
