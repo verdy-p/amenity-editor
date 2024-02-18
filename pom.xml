@@ -16,7 +16,7 @@
 		<db.user>sa</db.user>
 		<db.password>sa</db.password>
 
-		<oauth.signpost-version>2.0.0</oauth.signpost-version>
+		<oauth.signpost-version>2.1.1</oauth.signpost-version>
 		<oauth.callbackUrl>https://localhost:8080/amenity-editor/ae/oauth</oauth.callbackUrl>
 		<oauth.consumerKey/>
 		<oauth.consumerSecret/>
