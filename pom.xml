@@ -233,9 +233,9 @@
 		</dependency>
 	</dependencies>
 	<repositories>
-		<!-- For Apache components -->
+		<!-- For Apache components against Maven artifacts -->
 		<repository>
-			<id>repository.spring.snapshot</id>
+			<id>repository.maven.artifact</id>
 			<name>Maven Repository</name>
 			<url>https://mvnrepository.com/artifact</url>
 		</repository>
