@@ -279,15 +279,20 @@
 		<repository>
 			<id>mvnrepository.com</id>
 			<url>scp://mvnrepository.com/artifact</url>
+			<uniqueVersion>false</uniqueVersion>
 		</repository>
+<!--		
 		<repository>
 			<id>maven.grundid.de</id>
 			<url>scp://maven.grundid.de/repo/releases</url>
+			<uniqueVersion>false</uniqueVersion>
 		</repository>
 		<snapshotRepository>
 			<id>maven.grundid.de</id>
 			<url>scp://maven.grundid.de/repo/snapshots</url>
+			<uniqueVersion>false</uniqueVersion>
 		</snapshotRepository>
+-->
 	</distributionManagement>
 	<scm>
 		<developerConnection>scm:git:ssh://git@github.com/grundid/amenity-editor.git</developerConnection>
