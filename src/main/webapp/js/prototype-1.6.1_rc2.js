@@ -1190,7 +1190,7 @@ Element.Methods = {
   },
   update: (function(){
     var SELECT_ELEMENT_INNERHTML_BUGGY = (function(){
-      var r = false, var s = document.createElement('SELECT');
+      var r = false, s = document.createElement('SELECT');
       try {
         s.innerHTML = '<option value="0">0</option>';
         r = !s.options || !s.options[0] || s.options[0].nodeName.toUpperCase() !== 'OPTION';
