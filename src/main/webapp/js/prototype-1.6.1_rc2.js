@@ -1507,7 +1507,7 @@ Element.Methods = {
     var l = 0, t = 0;
     do {
       l += element.offsetLeft || 0, t += element.offsetTop || 0;
-      if ((element = element.offsetParent) && (element.tagName.toUpperCase() == 'BODY' || Element.getStyle(element, 'position') !== 'static') break;
+      if ((element = element.offsetParent) && (element.tagName.toUpperCase() == 'BODY' || Element.getStyle(element, 'position') !== 'static')) break;
     } while (element);
     return Element._returnOffset(l, t)
   },
