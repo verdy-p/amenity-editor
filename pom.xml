@@ -233,26 +233,53 @@
 		</dependency>
 	</dependencies>
 	<repositories>
-		<!-- For Apache components against Maven artifacts -->
+		<!-- For required components against latest Maven releases  -->
 		<repository>
 			<id>repository.maven.artifact</id>
-			<name>Maven Repository</name>
-			<url>https://mvnrepository.com/artifact</url>
-		</repository>
-		<!-- For testing against latest Spring snapshots -->
-		<repository>
-			<id>repository.spring.snapshot</id>
-			<name>Spring Snapshot Repository</name>
-			<url>https://repo.spring.io/snapshot</url>
+			<name>Maven2 Apache Repository</name>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+			<url>https://repo.maven.apache.org/maven2</url>
+			<layout>default</layout>
 		</repository>
 		<!-- For developing against latest Spring milestones -->
 		<repository>
 			<id>repository.spring.milestone</id>
 			<name>Spring Milestone Repository</name>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>daily</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</releases>
 			<url>https://repo.spring.io/milestone</url>
+			<layout>default</layout>
+		</repository>
+		<!-- For testing against latest Spring snapshots -->
+		<repository>
+			<id>repository.spring.snapshot</id>
+			<name>Spring Snapshot Repository</name>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>daily</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+			<url>https://repo.spring.io/snapshot</url>
+			<layout>default</layout>
 		</repository>
 	</repositories>
 	<distributionManagement>
+		<repository>
+			<id>mvnrepository.com</id>
+			<url>scp://mvnrepository.com/artifact</url>
+		</repository>
 		<repository>
 			<id>maven.grundid.de</id>
 			<url>scp://maven.grundid.de/repo/releases</url>
