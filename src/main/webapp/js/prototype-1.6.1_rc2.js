@@ -1442,7 +1442,7 @@ Element.Methods = {
     element = $(element);
     var elementStyle = element.style, match;
     if (Object.isString(styles)) {
-      styles == '' || element.style.cssText += ';' + styles;
+      if (!(styles == '')) element.style.cssText += ';' + styles;
       return styles.include('opacity') ? element.setOpacity(styles.match(/opacity:\s*(\d?\.?\d*)/)[1]) : element
     }
     for (var property in styles)
