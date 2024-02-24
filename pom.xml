@@ -233,6 +233,12 @@
 		</dependency>
 	</dependencies>
 	<repositories>
+		<!-- For Apache components -->
+		<repository>
+			<id>repository.spring.snapshot</id>
+			<name>Maven Repository</name>
+			<url>https://mvnrepository.com/artifact</url>
+		</repository>
 		<!-- For testing against latest Spring snapshots -->
 		<repository>
 			<id>repository.spring.snapshot</id>
