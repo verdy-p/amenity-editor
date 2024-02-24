@@ -90,7 +90,9 @@
  * issues. Applications that use the code below will continue to work seamlessly
  * when that happens.
  */
-var OpenLayers={singleFile:true};(function(){var singleFile=(typeof OpenLayers=="object"&&OpenLayers.singleFile);var scriptLocation;window.OpenLayers={_scriptName:(!singleFile)?"lib/OpenLayers.js":"OpenLayers.js",_getScriptLocation:function(){if(scriptLocation!=undefined){return scriptLocation;}
+var OpenLayers={singleFile:true};
+(function(){
+  var singleFile=(typeof OpenLayers=="object"&&OpenLayers.singleFile);var scriptLocation;window.OpenLayers={_scriptName:(!singleFile)?"lib/OpenLayers.js":"OpenLayers.js",_getScriptLocation:function(){if(scriptLocation!=undefined){return scriptLocation;}
 scriptLocation="";var isOL=new RegExp("(^|(.*?\\/))("+OpenLayers._scriptName+")(\\?|$)");var scripts=document.getElementsByTagName('script');for(var i=0,len=scripts.length;i<len;i++){var src=scripts[i].getAttribute('src');if(src){var match=src.match(isOL);if(match){scriptLocation=match[1];break;}}}
 return scriptLocation;}};if(!singleFile){var jsfiles=new Array("OpenLayers/Util.js","OpenLayers/BaseTypes.js","OpenLayers/BaseTypes/Class.js","OpenLayers/BaseTypes/Bounds.js","OpenLayers/BaseTypes/Element.js","OpenLayers/BaseTypes/LonLat.js","OpenLayers/BaseTypes/Pixel.js","OpenLayers/BaseTypes/Size.js","OpenLayers/Console.js","OpenLayers/Tween.js","Rico/Corner.js","Rico/Color.js","OpenLayers/Ajax.js","OpenLayers/Events.js","OpenLayers/Request.js","OpenLayers/Request/XMLHttpRequest.js","OpenLayers/Projection.js","OpenLayers/Map.js","OpenLayers/Layer.js","OpenLayers/Icon.js","OpenLayers/Marker.js","OpenLayers/Marker/Box.js","OpenLayers/Popup.js","OpenLayers/Tile.js","OpenLayers/Tile/Image.js","OpenLayers/Tile/Image/IFrame.js","OpenLayers/Tile/WFS.js","OpenLayers/Layer/Image.js","OpenLayers/Layer/SphericalMercator.js","OpenLayers/Layer/EventPane.js","OpenLayers/Layer/FixedZoomLevels.js","OpenLayers/Layer/Google.js","OpenLayers/Layer/Google/v3.js","OpenLayers/Layer/VirtualEarth.js","OpenLayers/Layer/Yahoo.js","OpenLayers/Layer/HTTPRequest.js","OpenLayers/Layer/Grid.js","OpenLayers/Layer/MapGuide.js","OpenLayers/Layer/MapServer.js","OpenLayers/Layer/MapServer/Untiled.js","OpenLayers/Layer/KaMap.js","OpenLayers/Layer/KaMapCache.js","OpenLayers/Layer/MultiMap.js","OpenLayers/Layer/Markers.js","OpenLayers/Layer/Text.js","OpenLayers/Layer/WorldWind.js","OpenLayers/Layer/ArcGIS93Rest.js","OpenLayers/Layer/WMS.js","OpenLayers/Layer/WMS/Untiled.js","OpenLayers/Layer/WMS/Post.js","OpenLayers/Layer/WMTS.js","OpenLayers/Layer/ArcIMS.js","OpenLayers/Layer/GeoRSS.js","OpenLayers/Layer/Boxes.js","OpenLayers/Layer/XYZ.js","OpenLayers/Layer/TMS.js","OpenLayers/Layer/TileCache.js","OpenLayers/Layer/Zoomify.js","OpenLayers/Popup/Anchored.js","OpenLayers/Popup/AnchoredBubble.js","OpenLayers/Popup/Framed.js","OpenLayers/Popup/FramedCloud.js","OpenLayers/Feature.js","OpenLayers/Feature/Vector.js","OpenLayers/Feature/WFS.js","OpenLayers/Handler.js","OpenLayers/Handler/Click.js","OpenLayers/Handler/Hover.js","OpenLayers/Handler/Point.js","OpenLayers/Handler/Path.js","OpenLayers/Handler/Polygon.js","OpenLayers/Handler/Feature.js","OpenLayers/Handler/Drag.js","OpenLayers/Handler/RegularPolygon.js","OpenLayers/Handler/Box.js","OpenLayers/Handler/MouseWheel.js","OpenLayers/Handler/Keyboard.js","OpenLayers/Control.js","OpenLayers/Control/Attribution.js","OpenLayers/Control/Button.js","OpenLayers/Control/ZoomBox.js","OpenLayers/Control/ZoomToMaxExtent.js","OpenLayers/Control/DragPan.js","OpenLayers/Control/Navigation.js","OpenLayers/Control/MouseDefaults.js","OpenLayers/Control/MousePosition.js","OpenLayers/Control/OverviewMap.js","OpenLayers/Control/KeyboardDefaults.js","OpenLayers/Control/PanZoom.js","OpenLayers/Control/PanZoomBar.js","OpenLayers/Control/ArgParser.js","OpenLayers/Control/Permalink.js","OpenLayers/Control/Scale.js","OpenLayers/Control/ScaleLine.js","OpenLayers/Control/Snapping.js","OpenLayers/Control/Split.js","OpenLayers/Control/LayerSwitcher.js","OpenLayers/Control/DrawFeature.js","OpenLayers/Control/DragFeature.js","OpenLayers/Control/ModifyFeature.js","OpenLayers/Control/Panel.js","OpenLayers/Control/SelectFeature.js","OpenLayers/Control/NavigationHistory.js","OpenLayers/Control/Measure.js","OpenLayers/Control/WMSGetFeatureInfo.js","OpenLayers/Control/WMTSGetFeatureInfo.js","OpenLayers/Control/Graticule.js","OpenLayers/Control/TransformFeature.js","OpenLayers/Control/SLDSelect.js","OpenLayers/Geometry.js","OpenLayers/Geometry/Rectangle.js","OpenLayers/Geometry/Collection.js","OpenLayers/Geometry/Point.js","OpenLayers/Geometry/MultiPoint.js","OpenLayers/Geometry/Curve.js","OpenLayers/Geometry/LineString.js","OpenLayers/Geometry/LinearRing.js","OpenLayers/Geometry/Polygon.js","OpenLayers/Geometry/MultiLineString.js","OpenLayers/Geometry/MultiPolygon.js","OpenLayers/Geometry/Surface.js","OpenLayers/Renderer.js","OpenLayers/Renderer/Elements.js","OpenLayers/Renderer/SVG.js","OpenLayers/Renderer/Canvas.js","OpenLayers/Renderer/VML.js","OpenLayers/Layer/Vector.js","OpenLayers/Layer/Vector/RootContainer.js","OpenLayers/Strategy.js","OpenLayers/Strategy/Filter.js","OpenLayers/Strategy/Fixed.js","OpenLayers/Strategy/Cluster.js","OpenLayers/Strategy/Paging.js","OpenLayers/Strategy/BBOX.js","OpenLayers/Strategy/Save.js","OpenLayers/Strategy/Refresh.js","OpenLayers/Filter.js","OpenLayers/Filter/FeatureId.js","OpenLayers/Filter/Logical.js","OpenLayers/Filter/Comparison.js","OpenLayers/Filter/Spatial.js","OpenLayers/Protocol.js","OpenLayers/Protocol/HTTP.js","OpenLayers/Protocol/SQL.js","OpenLayers/Protocol/SQL/Gears.js","OpenLayers/Protocol/WFS.js","OpenLayers/Protocol/WFS/v1.js","OpenLayers/Protocol/WFS/v1_0_0.js","OpenLayers/Protocol/WFS/v1_1_0.js","OpenLayers/Protocol/SOS.js","OpenLayers/Protocol/SOS/v1_0_0.js","OpenLayers/Layer/PointTrack.js","OpenLayers/Layer/GML.js","OpenLayers/Style.js","OpenLayers/Style2.js","OpenLayers/StyleMap.js","OpenLayers/Rule.js","OpenLayers/Format.js","OpenLayers/Format/XML.js","OpenLayers/Format/Context.js","OpenLayers/Format/ArcXML.js","OpenLayers/Format/ArcXML/Features.js","OpenLayers/Format/GML.js","OpenLayers/Format/GML/Base.js","OpenLayers/Format/GML/v2.js","OpenLayers/Format/GML/v3.js","OpenLayers/Format/Atom.js","OpenLayers/Format/KML.js","OpenLayers/Format/GeoRSS.js","OpenLayers/Format/WFS.js","OpenLayers/Format/WFSCapabilities.js","OpenLayers/Format/WFSCapabilities/v1.js","OpenLayers/Format/WFSCapabilities/v1_0_0.js","OpenLayers/Format/WFSCapabilities/v1_1_0.js","OpenLayers/Format/WFSDescribeFeatureType.js","OpenLayers/Format/WMSDescribeLayer.js","OpenLayers/Format/WMSDescribeLayer/v1_1.js","OpenLayers/Format/WKT.js","OpenLayers/Format/OSM.js","OpenLayers/Format/GPX.js","OpenLayers/Format/Filter.js","OpenLayers/Format/Filter/v1.js","OpenLayers/Format/Filter/v1_0_0.js","OpenLayers/Format/Filter/v1_1_0.js","OpenLayers/Format/SLD.js","OpenLayers/Format/SLD/v1.js","OpenLayers/Format/SLD/v1_0_0.js","OpenLayers/Format/OWSCommon/v1.js","OpenLayers/Format/OWSCommon/v1_0_0.js","OpenLayers/Format/OWSCommon/v1_1_0.js","OpenLayers/Format/CSWGetDomain.js","OpenLayers/Format/CSWGetDomain/v2_0_2.js","OpenLayers/Format/CSWGetRecords.js","OpenLayers/Format/CSWGetRecords/v2_0_2.js","OpenLayers/Format/WFST.js","OpenLayers/Format/WFST/v1.js","OpenLayers/Format/WFST/v1_0_0.js","OpenLayers/Format/WFST/v1_1_0.js","OpenLayers/Format/Text.js","OpenLayers/Format/JSON.js","OpenLayers/Format/GeoJSON.js","OpenLayers/Format/WMC.js","OpenLayers/Format/WMC/v1.js","OpenLayers/Format/WMC/v1_0_0.js","OpenLayers/Format/WMC/v1_1_0.js","OpenLayers/Format/WMSCapabilities.js","OpenLayers/Format/WMSCapabilities/v1.js","OpenLayers/Format/WMSCapabilities/v1_1.js","OpenLayers/Format/WMSCapabilities/v1_1_0.js","OpenLayers/Format/WMSCapabilities/v1_1_1.js","OpenLayers/Format/WMSCapabilities/v1_3.js","OpenLayers/Format/WMSCapabilities/v1_3_0.js","OpenLayers/Format/WMSGetFeatureInfo.js","OpenLayers/Format/SOSCapabilities.js","OpenLayers/Format/SOSCapabilities/v1_0_0.js","OpenLayers/Format/SOSGetObservation.js","OpenLayers/Format/SOSGetFeatureOfInterest.js","OpenLayers/Format/OWSContext.js","OpenLayers/Format/OWSContext/v0_3_1.js","OpenLayers/Format/WMTSCapabilities.js","OpenLayers/Format/WMTSCapabilities/v1_0_0.js","OpenLayers/Layer/WFS.js","OpenLayers/Control/GetFeature.js","OpenLayers/Control/MouseToolbar.js","OpenLayers/Control/NavToolbar.js","OpenLayers/Control/PanPanel.js","OpenLayers/Control/Pan.js","OpenLayers/Control/ZoomIn.js","OpenLayers/Control/ZoomOut.js","OpenLayers/Control/ZoomPanel.js","OpenLayers/Control/EditingToolbar.js","OpenLayers/Symbolizer.js","OpenLayers/Symbolizer/Point.js","OpenLayers/Symbolizer/Line.js","OpenLayers/Symbolizer/Polygon.js","OpenLayers/Symbolizer/Text.js","OpenLayers/Symbolizer/Raster.js","OpenLayers/Lang.js","OpenLayers/Lang/en.js");var agent=navigator.userAgent;var docWrite=(agent.match("MSIE")||agent.match("Safari"));if(docWrite){var allScriptTags=new Array(jsfiles.length);}
 var host=OpenLayers._getScriptLocation()+"lib/";for(var i=0,len=jsfiles.length;i<len;i++){if(docWrite){allScriptTags[i]="<script src='"+host+jsfiles[i]+"'></script>";}else{var s=document.createElement("script");s.src=host+jsfiles[i];var h=document.getElementsByTagName("head").length?document.getElementsByTagName("head")[0]:document.body;h.appendChild(s);}}
@@ -1794,7 +1796,24 @@ break;case"Comparison":var op=OpenLayers.Protocol.HTTP.COMP_TYPE_TO_OP_STR[filte
 params[filter.property+"__"+op]=value;params.queryable=params.queryable||[];params.queryable.push(filter.property);}else{OpenLayers.Console.warn("Unknown comparison filter type "+filter.type);}
 break;case"Logical":if(filter.type===OpenLayers.Filter.Logical.AND){for(var i=0,len=filter.filters.length;i<len;i++){params=this.filterToParams(filter.filters[i],params);}}else{OpenLayers.Console.warn("Unsupported logical filter type "+filter.type);}
 break;default:OpenLayers.Console.warn("Unknown filter type "+filterType);}
-return params;},regex2value:function(value){value=value.replace(/%/g,"\\%").replace(/\\\\\.(\*)?/g,function($0,$1){return $1?$0:"\\\\_";});value=value.replace(/\\\\\.\*/g,"\\\\%").replace(/(\\)?\.(\*)?/g,function($0,$1,$2){return $1||$2?$0:"_";});value=value.replace(/(\\)?\.\*/g,function($0,$1){return $1?$0:"%";});value=value.replace(/\\\./g,".").replace(/(\\)?\\\*/g,function($0,$1){return $1?$0:"*";});return value;},create:function(features,options){options=OpenLayers.Util.applyDefaults(options,this.options);var resp=new OpenLayers.Protocol.Response({reqFeatures:features,requestType:"create"});resp.priv=OpenLayers.Request.POST({url:options.url,callback:this.createCallback(this.handleCreate,resp,options),headers:options.headers,data:this.format.write(features)});return resp;},handleCreate:function(resp,options){this.handleResponse(resp,options);},update:function(feature,options){options=options||{};var url=options.url||feature.url||this.options.url+"/"+feature.fid;options=OpenLayers.Util.applyDefaults(options,this.options);var resp=new OpenLayers.Protocol.Response({reqFeatures:feature,requestType:"update"});resp.priv=OpenLayers.Request.PUT({url:url,callback:this.createCallback(this.handleUpdate,resp,options),headers:options.headers,data:this.format.write(feature)});return resp;},handleUpdate:function(resp,options){this.handleResponse(resp,options);},"delete":function(feature,options){options=options||{};var url=options.url||feature.url||this.options.url+"/"+feature.fid;options=OpenLayers.Util.applyDefaults(options,this.options);var resp=new OpenLayers.Protocol.Response({reqFeatures:feature,requestType:"delete"});resp.priv=OpenLayers.Request.DELETE({url:url,callback:this.createCallback(this.handleDelete,resp,options),headers:options.headers});return resp;},handleDelete:function(resp,options){this.handleResponse(resp,options);},handleResponse:function(resp,options){var request=resp.priv;if(options.callback){if(request.status>=200&&request.status<300){if(resp.requestType!="delete"){resp.features=this.parseFeatures(request);}
+return params;
+},
+regex2value:function(value){
+  value=value.replace(/%/g,"\\%").replace(/\\\\\.(\*)?/g, function($0,$1){
+    return $1?$0:"\\\\_";
+  });
+  value=value.replace(/\\\\\.\*/g,"\\\\%").replace(/(\\)?\.(\*)?/g, function($0,$1,$2){
+    return $1||$2?$0:"_";
+  });
+  value=value.replace(/(\\)?\.\*/g,function($0,$1){
+    return $1?$0:"%";
+  });
+  value=value.replace(/\\\./g,".").replace(/(\\)?\\\*/g,function($0,$1){
+    return $1?$0:"*";
+  });
+  return value;
+},
+create:function(features,options){options=OpenLayers.Util.applyDefaults(options,this.options);var resp=new OpenLayers.Protocol.Response({reqFeatures:features,requestType:"create"});resp.priv=OpenLayers.Request.POST({url:options.url,callback:this.createCallback(this.handleCreate,resp,options),headers:options.headers,data:this.format.write(features)});return resp;},handleCreate:function(resp,options){this.handleResponse(resp,options);},update:function(feature,options){options=options||{};var url=options.url||feature.url||this.options.url+"/"+feature.fid;options=OpenLayers.Util.applyDefaults(options,this.options);var resp=new OpenLayers.Protocol.Response({reqFeatures:feature,requestType:"update"});resp.priv=OpenLayers.Request.PUT({url:url,callback:this.createCallback(this.handleUpdate,resp,options),headers:options.headers,data:this.format.write(feature)});return resp;},handleUpdate:function(resp,options){this.handleResponse(resp,options);},"delete":function(feature,options){options=options||{};var url=options.url||feature.url||this.options.url+"/"+feature.fid;options=OpenLayers.Util.applyDefaults(options,this.options);var resp=new OpenLayers.Protocol.Response({reqFeatures:feature,requestType:"delete"});resp.priv=OpenLayers.Request.DELETE({url:url,callback:this.createCallback(this.handleDelete,resp,options),headers:options.headers});return resp;},handleDelete:function(resp,options){this.handleResponse(resp,options);},handleResponse:function(resp,options){var request=resp.priv;if(options.callback){if(request.status>=200&&request.status<300){if(resp.requestType!="delete"){resp.features=this.parseFeatures(request);}
 resp.code=OpenLayers.Protocol.Response.SUCCESS;}else{resp.code=OpenLayers.Protocol.Response.FAILURE;}
 options.callback.call(options.scope,resp);}},parseFeatures:function(request){var doc=request.responseXML;if(!doc||!doc.documentElement){doc=request.responseText;}
 if(!doc||doc.length<=0){return null;}
@@ -2538,16 +2557,296 @@ return this.format.read(doc);},CLASS_NAME:"OpenLayers.Protocol.SOS.v1_0_0"});Ope
 if(nTitle!=""){nPath.push(nTitle);}
 layerContext.metadata.nestingPath=nPath;if(layerContext.layersContext){this.setNestingPath(layerContext);}}}},decomposeNestingPath:function(nPath){var a=[];if(nPath instanceof Array){while(nPath.length>0){a.push(nPath.slice());nPath.pop();}
 a.reverse();}
-return a;},read:function(data){if(typeof data=="string"){data=OpenLayers.Format.XML.prototype.read.apply(this,[data]);}
-if(data&&data.nodeType==9){data=data.documentElement;}
-var context={};this.readNode(data,context);this.setNestingPath({layersContext:context.layersContext});var layers=[];this.processLayer(layers,context);delete context.layersContext;context.layersContext=layers;return context;},processLayer:function(layerArray,layer){if(layer.layersContext){for(var i=0,len=layer.layersContext.length;i<len;i++){var l=layer.layersContext[i];layerArray.push(l);if(l.layersContext){this.processLayer(layerArray,l);}}}},write:function(context,options){var name="OWSContext";this.nestingLayerLookup={};options=options||{};OpenLayers.Util.applyDefaults(options,context);var root=this.writeNode(name,options);this.nestingLayerLookup=null;this.setAttributeNS(root,this.namespaces["xsi"],"xsi:schemaLocation",this.schemaLocation);return OpenLayers.Format.XML.prototype.write.apply(this,[root]);},readers:{"kml":{"Document":function(node,obj){obj.features=new OpenLayers.Format.KML({kmlns:this.namespaces.kml,extractStyles:true}).read(node);}},"owc":{"OWSContext":function(node,obj){this.readChildNodes(node,obj);},"General":function(node,obj){this.readChildNodes(node,obj);},"ResourceList":function(node,obj){this.readChildNodes(node,obj);},"Layer":function(node,obj){var layerContext={metadata:{},visibility:(node.getAttribute("hidden")!="1"),queryable:(node.getAttribute("queryable")=="1"),opacity:((node.getAttribute("opacity")!=null)?parseFloat(node.getAttribute("opacity")):null),name:node.getAttribute("name"),categoryLayer:(node.getAttribute("name")==null),formats:[],styles:[]};if(!obj.layersContext){obj.layersContext=[];}
-obj.layersContext.push(layerContext);this.readChildNodes(node,layerContext);},"InlineGeometry":function(node,obj){obj.features=[];var elements=this.getElementsByTagNameNS(node,this.namespaces.gml,"featureMember");var el;if(elements.length>=1){el=elements[0];}
-if(el&&el.firstChild){var featurenode=(el.firstChild.nextSibling)?el.firstChild.nextSibling:el.firstChild;this.setNamespace("feature",featurenode.namespaceURI);this.featureType=featurenode.localName||featurenode.nodeName.split(":").pop();this.readChildNodes(node,obj);}},"Server":function(node,obj){if((!obj.service&&!obj.version)||(obj.service!=OpenLayers.Format.Context.serviceTypes.WMS)){obj.service=node.getAttribute("service");obj.version=node.getAttribute("version");this.readChildNodes(node,obj);}},"Name":function(node,obj){obj.name=this.getChildValue(node);this.readChildNodes(node,obj);},"Title":function(node,obj){obj.title=this.getChildValue(node);this.readChildNodes(node,obj);},"StyleList":function(node,obj){this.readChildNodes(node,obj.styles);},"Style":function(node,obj){var style={};obj.push(style);this.readChildNodes(node,style);},"LegendURL":function(node,obj){var legend={};obj.legend=legend;this.readChildNodes(node,legend);},"OnlineResource":function(node,obj){obj.url=this.getAttributeNS(node,this.namespaces.xlink,"href");this.readChildNodes(node,obj);}},"ows":OpenLayers.Format.OWSCommon.v1_0_0.prototype.readers.ows,"gml":OpenLayers.Format.GML.v2.prototype.readers.gml,"sld":OpenLayers.Format.SLD.v1_0_0.prototype.readers.sld,"feature":OpenLayers.Format.GML.v2.prototype.readers.feature},writers:{"owc":{"OWSContext":function(options){var node=this.createElementNSPlus("OWSContext",{attributes:{version:this.VERSION,id:options.id||OpenLayers.Util.createUniqueID("OpenLayers_OWSContext_")}});this.writeNode("General",options,node);this.writeNode("ResourceList",options,node);return node;},"General":function(options){var node=this.createElementNSPlus("General");this.writeNode("ows:BoundingBox",options,node);this.writeNode("ows:Title",options.title||'OpenLayers OWSContext',node);return node;},"ResourceList":function(options){var node=this.createElementNSPlus("ResourceList");for(var i=0,len=options.layers.length;i<len;i++){var layer=options.layers[i];var decomposedPath=this.decomposeNestingPath(layer.metadata.nestingPath);this.writeNode("_Layer",{layer:layer,subPaths:decomposedPath},node);}
-return node;},"Server":function(options){var node=this.createElementNSPlus("Server",{attributes:{version:options.version,service:options.service}});this.writeNode("OnlineResource",options,node);return node;},"OnlineResource":function(options){var node=this.createElementNSPlus("OnlineResource",{attributes:{"xlink:href":options.url}});return node;},"InlineGeometry":function(layer){var node=this.createElementNSPlus("InlineGeometry");this.writeNode("gml:boundedBy",layer.getDataExtent(),node);for(var i=0,len=layer.features.length;i<len;i++){this.writeNode("gml:featureMember",layer.features[i],node);}
-return node;},"StyleList":function(styles){var node=this.createElementNSPlus("StyleList");for(var i=0,len=styles.length;i<len;i++){this.writeNode("Style",styles[i],node);}
-return node;},"Style":function(style){var node=this.createElementNSPlus("Style");this.writeNode("Name",style,node);this.writeNode("Title",style,node);this.writeNode("LegendURL",style,node);return node;},"Name":function(obj){var node=this.createElementNSPlus("Name",{value:obj.name});return node;},"Title":function(obj){var node=this.createElementNSPlus("Title",{value:obj.title});return node;},"LegendURL":function(style){var node=this.createElementNSPlus("LegendURL");this.writeNode("OnlineResource",style.legend,node);return node;},"_WMS":function(layer){var node=this.createElementNSPlus("Layer",{attributes:{name:layer.params.LAYERS,queryable:layer.queryable?"1":"0",hidden:layer.visibility?"0":"1",opacity:layer.opacity?layer.opacity:null}});this.writeNode("ows:Title",layer.name,node);this.writeNode("ows:OutputFormat",layer.params.FORMAT,node);this.writeNode("Server",{service:OpenLayers.Format.Context.serviceTypes.WMS,version:layer.params.VERSION,url:layer.url},node);if(layer.metadata.styles&&layer.metadata.styles.length>0){this.writeNode("StyleList",layer.metadata.styles,node);}
-return node;},"_Layer":function(options){var layer,subPaths,node,title;layer=options.layer;subPaths=options.subPaths;node=null;title=null;if(subPaths.length>0){var path=subPaths[0].join("/");var index=path.lastIndexOf("/");node=this.nestingLayerLookup[path];title=(index>0)?path.substring(index+1,path.length):path;if(!node){node=this.createElementNSPlus("Layer");this.writeNode("ows:Title",title,node);this.nestingLayerLookup[path]=node;}
-options.subPaths.shift();this.writeNode("_Layer",options,node);return node;}else{if(layer instanceof OpenLayers.Layer.WMS){node=this.writeNode("_WMS",layer);}else if(layer instanceof OpenLayers.Layer.Vector){if(layer.protocol instanceof OpenLayers.Protocol.WFS.v1){node=this.writeNode("_WFS",layer);}else if(layer.protocol instanceof OpenLayers.Protocol.HTTP){if(layer.protocol.format instanceof OpenLayers.Format.GML){layer.protocol.format.version="2.1.2";node=this.writeNode("_GML",layer);}else if(layer.protocol.format instanceof OpenLayers.Format.KML){layer.protocol.format.version="2.2";node=this.writeNode("_KML",layer);}}else{this.setNamespace("feature",this.featureNS);node=this.writeNode("_InlineGeometry",layer);}}
-if(layer.options.maxScale){this.writeNode("sld:MinScaleDenominator",layer.options.maxScale,node);}
-if(layer.options.minScale){this.writeNode("sld:MaxScaleDenominator",layer.options.minScale,node);}
-this.nestingLayerLookup[layer.name]=node;return node;}},"_WFS":function(layer){var node=this.createElementNSPlus("Layer",{attributes:{name:layer.protocol.featurePrefix+":"+layer.protocol.featureType,hidden:layer.visibility?"0":"1"}});this.writeNode("ows:Title",layer.name,node);this.writeNode("Server",{service:OpenLayers.Format.Context.serviceTypes.WFS,version:layer.protocol.version,url:layer.protocol.url},node);return node;},"_InlineGeometry":function(layer){var node=this.createElementNSPlus("Layer",{attributes:{name:this.featureType,hidden:layer.visibility?"0":"1"}});this.writeNode("ows:Title",layer.name,node);this.writeNode("InlineGeometry",layer,node);return node;},"_GML":function(layer){var node=this.createElementNSPlus("Layer");this.writeNode("ows:Title",layer.name,node);this.writeNode("Server",{service:OpenLayers.Format.Context.serviceTypes.GML,url:layer.protocol.url,version:layer.protocol.format.version},node);return node;},"_KML":function(layer){var node=this.createElementNSPlus("Layer");this.writeNode("ows:Title",layer.name,node);this.writeNode("Server",{service:OpenLayers.Format.Context.serviceTypes.KML,version:layer.protocol.format.version,url:layer.protocol.url},node);return node;}},"gml":OpenLayers.Util.applyDefaults({"boundedBy":function(bounds){var node=this.createElementNSPlus("gml:boundedBy");this.writeNode("gml:Box",bounds,node);return node;}},OpenLayers.Format.GML.v2.prototype.writers.gml),"ows":OpenLayers.Format.OWSCommon.v1_0_0.prototype.writers.ows,"sld":OpenLayers.Format.SLD.v1_0_0.prototype.writers.sld,"feature":OpenLayers.Format.GML.v2.prototype.writers.feature},CLASS_NAME:"OpenLayers.Format.OWSContext.v0_3_1"});
+return a;},
+read:function(data){
+  if(typeof data=="string"){data=OpenLayers.Format.XML.prototype.read.apply(this,[data]);}
+  if(data&&data.nodeType==9){data=data.documentElement;}
+  var context={};
+  this.readNode(data,context);
+  this.setNestingPath({layersContext:context.layersContext});
+  var layers=[];
+  this.processLayer(layers,context);
+  delete context.layersContext;
+  context.layersContext=layers;
+  return context;
+},
+processLayer:function(layerArray,layer){
+  if(layer.layersContext){
+    for(var i=0,len=layer.layersContext.length;i<len;i++){
+      var l=layer.layersContext[i];
+      layerArray.push(l);
+      if(l.layersContext){this.processLayer(layerArray,l);}
+    }
+  }
+},
+write:function(context,options){
+  var name="OWSContext";
+  this.nestingLayerLookup={};
+  options=options||{};
+  OpenLayers.Util.applyDefaults(options,context);
+  var root=this.writeNode(name,options);
+  this.nestingLayerLookup=null;
+  this.setAttributeNS(root,this.namespaces["xsi"],"xsi:schemaLocation",this.schemaLocation);
+  return OpenLayers.Format.XML.prototype.write.apply(this,[root]);
+},
+readers:{
+  kml:{
+    Document:function(node,obj){
+      obj.features=new OpenLayers.Format.KML({kmlns:this.namespaces.kml,extractStyles:true}).read(node);
+    }
+  },
+  owc:{
+    OWSContext:function(node,obj){this.readChildNodes(node,obj);},
+    General:function(node,obj){this.readChildNodes(node,obj);},
+    ResourceList:function(node,obj){this.readChildNodes(node,obj);},
+    Layer:function(node,obj){
+      var layerContext={
+        metadata:{},
+        visibility:(node.getAttribute("hidden")!="1"),
+        queryable:(node.getAttribute("queryable")=="1"),
+        opacity:((node.getAttribute("opacity")!=null)?parseFloat(node.getAttribute("opacity")):null),
+        name:node.getAttribute("name"),
+        categoryLayer:(node.getAttribute("name")==null),
+        formats:[],
+        styles:[]
+      };
+      if(!obj.layersContext){obj.layersContext=[];}
+      obj.layersContext.push(layerContext);
+      this.readChildNodes(node,layerContext);
+    },
+    InlineGeometry:function(node,obj){
+      obj.features=[];
+      var elements=this.getElementsByTagNameNS(node,this.namespaces.gml,"featureMember");
+      var el;
+      if(elements.length>=1){el=elements[0];}
+      if(el&&el.firstChild){
+        var featurenode=(el.firstChild.nextSibling)?el.firstChild.nextSibling:el.firstChild;
+        this.setNamespace("feature",featurenode.namespaceURI);
+        this.featureType=featurenode.localName||featurenode.nodeName.split(":").pop();
+        this.readChildNodes(node,obj);
+      }
+    },
+    Server:function(node,obj){
+      if((!obj.service&&!obj.version)||(obj.service!=OpenLayers.Format.Context.serviceTypes.WMS)){
+        obj.service=node.getAttribute("service");
+        obj.version=node.getAttribute("version");
+        this.readChildNodes(node,obj);
+      }
+    },
+    Name:function(node,obj){
+      obj.name=this.getChildValue(node);
+      this.readChildNodes(node,obj);
+    },
+    Title:function(node,obj){
+      obj.title=this.getChildValue(node);
+      this.readChildNodes(node,obj);
+    },
+    StyleList:function(node,obj){this.readChildNodes(node,obj.styles);},
+    Style:function(node,obj){
+      var style={};
+      obj.push(style);
+      this.readChildNodes(node,style);
+    },
+    LegendURL:function(node,obj){
+      var legend={};
+      obj.legend=legend;
+      this.readChildNodes(node,legend);
+    },
+    OnlineResource:function(node,obj){
+      obj.url=this.getAttributeNS(node,this.namespaces.xlink,"href");
+      this.readChildNodes(node,obj);
+    }
+  },
+  ows:OpenLayers.Format.OWSCommon.v1_0_0.prototype.readers.ows,
+  gml:OpenLayers.Format.GML.v2.prototype.readers.gml,
+  sld:OpenLayers.Format.SLD.v1_0_0.prototype.readers.sld,
+  feature:OpenLayers.Format.GML.v2.prototype.readers.feature
+},
+writers:{
+  owc:{
+    OWSContext:function(options){
+      var node=this.createElementNSPlus("OWSContext",{
+        attributes:{
+          version:this.VERSION,
+          id:options.id||OpenLayers.Util.createUniqueID("OpenLayers_OWSContext_")
+        }
+      });
+      this.writeNode("General",options,node);
+      this.writeNode("ResourceList",options,node);
+      return node;
+    },
+    General:function(options){
+      var node=this.createElementNSPlus("General");
+      this.writeNode("ows:BoundingBox",options,node);
+      this.writeNode("ows:Title",options.title||'OpenLayers OWSContext',node);
+      return node;
+    },
+    ResourceList:function(options){
+      var node=this.createElementNSPlus("ResourceList");
+      for(var i=0,len=options.layers.length;i<len;i++){
+        var layer=options.layers[i];
+        var decomposedPath=this.decomposeNestingPath(layer.metadata.nestingPath);
+        this.writeNode("_Layer",{layer:layer,subPaths:decomposedPath},node);
+      }
+      return node;
+    },
+    Server:function(options){
+      var node=this.createElementNSPlus("Server",{
+        attributes:{
+          version:options.version,
+          service:options.service
+        }
+      });
+      this.writeNode("OnlineResource",options,node);
+      return node;
+    },
+    OnlineResource:function(options){
+      var node=this.createElementNSPlus("OnlineResource",{
+        attributes:{"xlink:href":options.url}
+      });
+      return node;
+    },
+    InlineGeometry:function(layer){
+      var node=this.createElementNSPlus("InlineGeometry");
+      this.writeNode("gml:boundedBy",layer.getDataExtent(),node);
+      for(var i=0,len=layer.features.length;i<len;i++){this.writeNode("gml:featureMember",layer.features[i],node);}
+      return node;
+    },
+    StyleList:function(styles){
+      var node=this.createElementNSPlus("StyleList");
+      for(var i=0,len=styles.length;i<len;i++){this.writeNode("Style",styles[i],node);}
+      return node;
+    },
+    Style:function(style){
+      var node=this.createElementNSPlus("Style");
+      this.writeNode("Name",style,node);
+      this.writeNode("Title",style,node);
+      this.writeNode("LegendURL",style,node);
+      return node;
+    },
+    Name:function(obj){return this.createElementNSPlus("Name",{value:obj.name});},
+    Title:function(obj){return node=this.createElementNSPlus("Title",{value:obj.title});},
+    LegendURL:function(style){
+      var node=this.createElementNSPlus("LegendURL");
+      this.writeNode("OnlineResource",style.legend,node);
+      return node;
+    },
+    _WMS:function(layer){
+      var node=this.createElementNSPlus("Layer",{
+        attributes:{
+          name:layer.params.LAYERS,
+          queryable:layer.queryable?"1":"0",
+          hidden:layer.visibility?"0":"1",
+          opacity:layer.opacity?layer.opacity:null
+        }
+      });
+      this.writeNode("ows:Title",layer.name,node);
+      this.writeNode("ows:OutputFormat",layer.params.FORMAT,node);
+      this.writeNode("Server",{
+        service:OpenLayers.Format.Context.serviceTypes.WMS,
+        version:layer.params.VERSION,
+        url:layer.url
+      },node);
+      if(layer.metadata.styles&&layer.metadata.styles.length>0){
+        this.writeNode("StyleList",layer.metadata.styles,node);}
+      return node;
+    },
+    _Layer:function(options){
+      var layer=options.layer,subPaths=options.subPaths,node=null,title=null;
+      if(subPaths.length>0){
+        var path=subPaths[0].join("/");
+        var index=path.lastIndexOf("/");
+        node=this.nestingLayerLookup[path];
+        title=(index>0)?path.substring(index+1,path.length):path;
+        if(!node){
+          node=this.createElementNSPlus("Layer");
+          this.writeNode("ows:Title",title,node);
+          this.nestingLayerLookup[path]=node;
+        }
+        options.subPaths.shift();
+        this.writeNode("_Layer",options,node);
+        return node;
+      }else{
+        if(layer instanceof OpenLayers.Layer.WMS){
+          node=this.writeNode("_WMS",layer);
+        }else if(layer instanceof OpenLayers.Layer.Vector){
+          if(layer.protocol instanceof OpenLayers.Protocol.WFS.v1){
+            node=this.writeNode("_WFS",layer);
+          }else if(layer.protocol instanceof OpenLayers.Protocol.HTTP){
+            if(layer.protocol.format instanceof OpenLayers.Format.GML){
+              layer.protocol.format.version="2.1.2";
+              node=this.writeNode("_GML",layer);
+            }else if(layer.protocol.format instanceof OpenLayers.Format.KML){
+              layer.protocol.format.version="2.2";
+              node=this.writeNode("_KML",layer);
+            }
+          }else{
+            this.setNamespace("feature",this.featureNS);
+            node=this.writeNode("_InlineGeometry",layer);
+          }
+        }
+        if(layer.options.maxScale){this.writeNode("sld:MinScaleDenominator",layer.options.maxScale,node);}
+        if(layer.options.minScale){this.writeNode("sld:MaxScaleDenominator",layer.options.minScale,node);}
+        this.nestingLayerLookup[layer.name]=node;
+        return node;
+      }
+    },
+    _WFS:function(layer){
+      var node=this.createElementNSPlus("Layer",{
+        attributes:{
+          name:layer.protocol.featurePrefix+":"+layer.protocol.featureType,
+          hidden:layer.visibility?"0":"1"
+        }
+      });
+      this.writeNode("ows:Title",layer.name,node);
+      this.writeNode("Server",{
+        service:OpenLayers.Format.Context.serviceTypes.WFS,
+        version:layer.protocol.version,
+        url:layer.protocol.url
+      },node);
+      return node;
+    },
+    _InlineGeometry:function(layer){
+      var node=this.createElementNSPlus("Layer",{
+        attributes:{
+          name:this.featureType,
+          hidden:layer.visibility?"0":"1"
+        }
+      });
+      this.writeNode("ows:Title",layer.name,node);
+      this.writeNode("InlineGeometry",layer,node);
+      return node;
+    },
+    _GML:function(layer){
+      var node=this.createElementNSPlus("Layer");
+      this.writeNode("ows:Title",layer.name,node);
+      this.writeNode("Server",{
+        service:OpenLayers.Format.Context.serviceTypes.GML,
+        url:layer.protocol.url,
+        version:layer.protocol.format.version
+      },node);
+      return node;
+    },
+    _KML:function(layer){
+      var node=this.createElementNSPlus("Layer");
+      this.writeNode("ows:Title",layer.name,node);
+      this.writeNode("Server",{
+        service:OpenLayers.Format.Context.serviceTypes.KML,
+        version:layer.protocol.format.version,
+        url:layer.protocol.url
+      },node);
+      return node;
+    }
+  },
+  gml:OpenLayers.Util.applyDefaults({
+    boundedBy:function(bounds){
+      var node=this.createElementNSPlus("gml:boundedBy");
+      this.writeNode("gml:Box",bounds,node);
+      return node;
+    }
+  },OpenLayers.Format.GML.v2.prototype.writers.gml),
+  ows:OpenLayers.Format.OWSCommon.v1_0_0.prototype.writers.ows,
+  sld:OpenLayers.Format.SLD.v1_0_0.prototype.writers.sld,
+  feature:OpenLayers.Format.GML.v2.prototype.writers.feature
+},
+CLASS_NAME:"OpenLayers.Format.OWSContext.v0_3_1"
