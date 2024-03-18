@@ -37,20 +37,23 @@ public class AutoCompleteService {
 	private NodeValueSearchByKeyAndValue nodeValueSearchByKeyAndValue;
 
 	public List<NodeValueResult> searchByKey(String key) {
-		key = key.replace("\\", "\\\\")
+		key = key
+			.replace("\\", "\\\\").replace("'", "\\'").replace("\"", "\\\"").replace("[", "\\[").replace("]", "\\]")
 			.replace("\t", "\\t").replace("\b", "\\b").replace("\n", "\\n").replace("\r", "\\r").replace("\f", "\\f")
-			.replace("\'", "\\'").replace("\"", "\\\"").replace("[", "\[").replace("]", "\]");
+			;
 		log.debug("Searching [" + key + "]");
 		return nodeValueSearchByKey.execute(key.replace("_", "\\_").replace("%", "\\%") + "%");
 	}
 
 	public List<NodeValueResult> searchByKeyAndValue(String key, String value) {
-		key = key.replace("\\", "\\\\")
+		key = key
+			.replace("\\", "\\\\").replace("'", "\\'").replace("\"", "\\\"").replace("[", "\\[").replace("]", "\\]")
 			.replace("\t", "\\t").replace("\b", "\\b").replace("\n", "\\n").replace("\r", "\\r").replace("\f", "\\f")
-			.replace("\'", "\\'").replace("\"", "\\\"").replace("[", "\[").replace("]", "\]");
-		value = value.replace("\\", "\\\\")
+			;
+		value = value
+			.replace("\\", "\\\\").replace("'", "\\'").replace("\"", "\\\"").replace("[", "\\[").replace("]", "\\]")
 			.replace("\t", "\\t").replace("\b", "\\b").replace("\n", "\\n").replace("\r", "\\r").replace("\f", "\\f")
-			.replace("\'", "\\'").replace("\"", "\\\"").replace("[", "\[").replace("]", "\]");
+			;
 		log.debug("Searching [" + key + "] [" + value + "]");
 		return nodeValueSearchByKeyAndValue.execute(key, value.replace("_", "\\_").replace("%", "\\%") + "%");
 	}
