@@ -22,10 +22,11 @@ public abstract class GeoConverter {
 	private static final double DB_FACTOR = 10000000;
 
 	public static long toDb(double value) {
-		value = Math.round(value * DB_FACTOR);
-		return value < Long.MIN_VALUE ? Long.MIN_VALUE
-			: value > Long.MAX_VALUE ? Long.MAX_VALUE
-			: (long)value;
+		if (value < Long.MIN_VALUE / DB_FACTOR)
+			return Long.MIN_VALUE;
+		if (value > Long.MAX_VALUE / DB_FACTOR)
+			return Long.MAX_VALUE;
+		return (long)Math.round(value * DB_FACTOR);
 	}
 
 	public static double fromDb(long value) {
