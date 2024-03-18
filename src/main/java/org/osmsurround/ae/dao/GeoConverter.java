@@ -17,9 +17,6 @@
  */
 package org.osmsurround.ae.dao;
 
-import java.lang.Long.MIN_VALUE;
-import java.lang.Long.MAX_VALUE;
-
 public abstract class GeoConverter {
 
 	private static final double DB_FACTOR = 10000000;
