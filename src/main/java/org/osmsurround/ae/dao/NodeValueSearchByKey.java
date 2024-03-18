@@ -31,8 +31,7 @@ public class NodeValueSearchByKey extends NodeValueResultMappingSqlQuery {
 	@Autowired
 	public NodeValueSearchByKey(DataSource dataSource) {
 		setDataSource(dataSource);
-
-		setSql("SELECT DISTINCT k, 0 FROM keyvalues WHERE lower(k) LIKE lower(?) ORDER BY k LIMIT 20");
+		setSql("SELECT DISTINCT k,0 FROM keyvalues WHERE lower(k)LIKE lower(?)ORDER BY k LIMIT 20");
 		declareParameter(new SqlParameter(Types.VARCHAR));
 	}
 }
