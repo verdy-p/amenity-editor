@@ -17,12 +17,18 @@
  */
 package org.osmsurround.ae.dao;
 
+import java.lang.Long.MIN_VALUE;
+import java.lang.Long.MAX_VALUE;
+
 public abstract class GeoConverter {
 
 	private static final double DB_FACTOR = 10000000;
 
 	public static long toDb(double value) {
-		return Math.round(value * DB_FACTOR);
+		value = Math.round(value * DB_FACTOR);
+		return value < Long.MIN_VALUE ? Long.MIN_VALUE
+			: value > Long.MAX_VALUE ? Long.MAX_VALUE
+			: (long)value;
 	}
 
 	public static double fromDb(long value) {
