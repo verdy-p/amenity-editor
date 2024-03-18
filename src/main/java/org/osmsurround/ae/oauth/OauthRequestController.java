@@ -46,7 +46,9 @@ public class OauthRequestController {
 			@RequestParam(value = "oauth_verifier", defaultValue = "") String oAuthVerifier,
 			HttpServletResponse response) {
 		OauthTokens oauthTokens = oauthService.retrieveAccessToken(oAuthVerifier);
-		response.addCookie(oauthCookieService.createOauthCookie(oauthTokens));
+		Cookie cookie = oauthCookieService.createOauthCookie(oauthTokens)
+		cookie.setSecure(true);
+		response.addCookie(cookie);
 		return "redirect:index";
 	}
 
