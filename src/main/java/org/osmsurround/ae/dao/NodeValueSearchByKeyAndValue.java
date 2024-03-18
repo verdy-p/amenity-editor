@@ -32,8 +32,8 @@ public class NodeValueSearchByKeyAndValue extends NodeValueResultMappingSqlQuery
 	public NodeValueSearchByKeyAndValue(DataSource dataSource) {
 		setDataSource(dataSource);
 		setSql("SELECT DISTINCT v,valuecount FROM keyvalues"
-				" WHERE LOWER(k)=LOWER(?)AND LOWER(v)LIKE LOWER(?)"
-				" ORDER BY valuecount DESC LIMIT 20");
+			+ " WHERE LOWER(k)=LOWER(?)AND LOWER(v)LIKE LOWER(?)"
+			+ " ORDER BY valuecount DESC LIMIT 20");
 		declareParameter(new SqlParameter(Types.VARCHAR));
 		declareParameter(new SqlParameter(Types.VARCHAR));
 	}
