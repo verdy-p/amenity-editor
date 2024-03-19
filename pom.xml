@@ -92,17 +92,17 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jcl</artifactId>
-			<version>5.3.32</version>
+			<version>5.3.33</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>5.3.32</version>
+			<version>5.3.33</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>5.3.32</version>
+			<version>5.3.33</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -118,7 +118,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<version>6.1.5</version>
+			<version>5.3.33</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>commons-logging</artifactId>
@@ -129,7 +129,7 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>5.8.11</version>
+			<version>5.8.10</version>
 		</dependency>
 
 		<dependency>
