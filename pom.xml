@@ -86,7 +86,7 @@
 		<dependency>
 			<groupId>jakarta.xml.bind</groupId>
 			<artifactId>jakarta.xml.bind-api</artifactId>
-			<version>2.3.3</version>
+			<version>4.0.2</version>
 		</dependency>
 		<!-- Spring6 requires Java17+, otherwise use Spring5 for Java11 or Java8 -->
 		<dependency>
