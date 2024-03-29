@@ -18,3 +18,5 @@ jobs:
         uses: actions/checkout@v3
       - name: 'Dependency Review'
         uses: actions/dependency-review-action@v2
+      - name: 'Maven Dependency Tree Dependency Submission'
+        uses: advanced-security/maven-dependency-submission-action@v4.0.2
